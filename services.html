@@ -1,0 +1,5682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Outfit',sans-serif;
+  background:#fff;
+  padding-bottom:65px;
+}
+/* 🔒 LOCK BACKGROUND */
+body.popup-open{
+  position:fixed;
+  width:100%;
+  overflow:hidden;
+}
+/* TOP GAP */
+.topGap{ height:50px; }
+
+/* LOCATION */
+.locationBox{ padding:0 15px; }
+
+.locRow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.locRow i{
+  color:#0f9d58;
+  font-size:16px;
+}
+
+.city{
+  font-size:15px;
+  font-weight:600;
+}
+
+.address{
+  font-size:11px;
+  color:#666;
+}
+
+/* 🎥 VIDEO SECTION */
+.videoBox{
+  width:100%;
+  margin:0;              /* ❌ remove side gaps */
+       /* keep only top spacing if needed */
+  border-radius:0;       /* 🔥 remove curve so edges match */
+  overflow:hidden;
+}
+.serviceList{
+  padding:0 16px;   /* 🔥 left & right gap */
+}
+.videoBox video{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  object-position: top;   /* 🔥 KEY FIX */
+  display:block;
+}
+
+/* CARDS */
+.serviceCard{
+  position:relative;
+  height:195px;              /* 🔥 full card height */
+  border-radius:14px;
+  overflow:hidden;
+  margin-bottom:12px;
+}
+
+/* IMAGE SLIDER */
+.imgSlider{
+  position:absolute;
+  width:100%;
+  height:100%;
+}
+
+.imgSlider img{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+
+  opacity:0;
+  transition:opacity 0.6s ease;
+}
+
+.imgSlider img.active{
+  opacity:1;
+}
+/* OVERLAY LAYOUT FIX */
+.cardOverlay{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:100%;   /* 🔥 full height control */
+
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end; /* push content to bottom */
+
+  padding:12px;
+
+  background:linear-gradient(
+    to top,
+    rgba(0,0,0,0.75),
+    rgba(0,0,0,0.05)
+  );
+
+  color:#fff;
+  box-sizing:border-box;
+}
+
+/* TEXT */
+.title{
+    font-family:'Playfair Display', serif;
+
+  font-size:16px;
+  font-weight:700;
+}
+
+.sub{
+  font-size:12px;
+  margin-top:2px;
+  color:#ddd;
+}
+
+/* PRICE + BUTTON ROW */
+.priceRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-top:10px;
+}
+
+/* PRICE */
+.price{
+  font-size:15px;
+  font-weight:700;
+}
+
+/* BUTTON FIX */
+.bookBtn{
+  background:#0f5c5c;
+  color:#fff;
+  border:none;
+
+  padding:6px 14px;
+  border-radius:20px;   /* 🔥 pill shape (better UI) */
+
+  font-size:12px;
+  font-weight:600;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-width:60px;       /* 🔥 prevents shrink */
+  height:28px;
+
+  cursor:pointer;
+}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:6px;
+}
+
+.tags span{
+  font-size:10px;
+  padding:4px 8px;
+
+  background:rgba(255,255,255,0.2); /* 🔥 glass look */
+  color:#fff;
+
+  border-radius:20px;
+  backdrop-filter:blur(4px);
+
+  border:1px solid rgba(255,255,255,0.3);
+}
+/* NAVBAR */
+.bottomNav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:58px;
+
+  background:#fff;
+  border-top:1px solid #eee;
+
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.navItem{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  color:#888;
+  font-size:10px;
+}
+
+.navItem i{
+  font-size:20px;
+  margin-bottom:2px;
+}
+
+.navItem span{
+  font-size:10px;
+}
+
+
+.topSection{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+}
+
+/* IMAGE BACKGROUND */
+.topBg{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;
+}
+
+/* CONTENT ABOVE IMAGE */
+.topSection > *:not(.topBg){
+  position:relative;
+  z-index:1;
+}
+.sectionHeader{
+  padding:14px 15px 6px;
+}
+
+.sectionHeader h2{
+  font-size:18px;
+  font-weight:600;
+  margin:0;
+  color:#222;
+}
+
+/* small decorative line */
+.sectionHeader .line{
+  width:40px;
+  height:3px;
+  background:#0f5c5c;
+  border-radius:2px;
+  margin-top:6px;
+}
+.videoCard{
+  position:absolute;
+  width:100%;
+  height:100%;
+}
+
+.videoCard video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.makeupHeader{
+  padding:16px;
+  margin-top:10px;
+}
+
+/* stylish heading */
+.makeupHeader h2{
+  font-size:18px;
+  font-weight:700;
+  font-family:'Poppins', sans-serif;
+
+  display:inline-block;
+  position:relative;
+  color:#222;
+}
+
+/* underline accent */
+.makeupHeader h2::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-4px;
+
+  width:100%;
+  height:3px;
+
+  background:linear-gradient(to right, #ff7eb3, #ff758c);
+  border-radius:2px;
+}
+
+/* GRID */
+.makeupGrid{
+  display:flex;
+  gap:12px;
+  padding:0 16px;
+  margin-top:10px;
+}
+
+/* CARD */
+.makeupCard{
+  flex:1;
+  position:relative;
+  height:180px;
+
+  border-radius:14px;
+  overflow:hidden;
+}
+
+/* VIDEO */
+.makeupCard video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* OVERLAY */
+.makeupContent{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+
+  padding:10px;
+
+  background:linear-gradient(
+    to top,
+    rgba(0,0,0,0.7),
+    transparent
+  );
+
+  color:#fff;
+}
+
+/* TITLE */
+.makeupTitle{
+  font-size:14px;
+  font-weight:600;
+}
+.cateringOverlay{
+  box-sizing:border-box;   /* 🔥 MAIN FIX */
+}
+/* BUTTON */
+.bookNow{
+  margin-top:6px;
+
+  background:#0f5c5c;
+  color:#fff;
+  border:none;
+
+  padding:5px 10px;
+  border-radius:8px;
+
+  font-size:11px;
+}
+.makeupCard video{
+  transform:scale(1.05);
+}
+.makeupCard:nth-child(2) .bookNow{
+  background:#ff4d6d;
+}
+.cateringHeader i{
+  margin-right:5px;
+  color:#0f5c5c;
+}
+.cateringHeader{
+  padding:16px;
+  margin-top:14px;
+}
+
+/* small top label */
+.cateringHeader span{
+  font-size:11px;
+  letter-spacing:2px;
+  color:#999;
+}
+
+/* main heading */
+.cateringHeader h2{
+  font-size:20px;
+  font-weight:700;
+  margin:2px 0 0;
+
+  color:#0f5c5c;
+  font-family:'Poppins', sans-serif;
+}
+
+/* GRID */
+.cateringGrid{
+  display:flex;
+  gap:12px;
+  padding:0 16px;
+  margin-top:10px;
+}
+
+/* CARD */
+.cateringCard{
+  flex:1;
+  position:relative;
+  height:140px;
+
+  border-radius:14px;
+  overflow:hidden;
+}
+
+/* IMAGE */
+.cateringCard img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* OVERLAY */
+
+
+/* TITLE */
+.cateringTitle{
+  font-size:14px;
+  font-weight:600;
+
+  flex:1;                 /* 🔥 takes space */
+  overflow:hidden;
+  text-overflow:ellipsis; /* 🔥 avoid pushing button */
+  white-space:nowrap;
+}
+
+/* BUTTON */
+.bookNow{
+  margin-top:5px;
+
+  background:#0f5c5c;
+  color:#fff;
+  border:none;
+
+  padding:5px 10px;
+  border-radius:8px;
+
+  font-size:11px;
+}
+.cateringWrap{
+  padding:0 16px;
+  margin-top:-10px;
+}
+
+/* TOP ROW */
+.cateringRow{
+  display:flex;
+  gap:10px;
+}
+
+/* CARD */
+.cateringCard{
+  flex:1;
+  position:relative;
+  height:140px;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+/* CENTER WRAPPER */
+.cateringCenter{
+  display:flex;
+  justify-content:center;   /* 🔥 center align */
+  margin-top:12px;
+}
+
+/* CENTER CARD SIZE */
+.cateringCard.center{
+  width:70%;   /* 🔥 controls size */
+  height:150px;
+}
+
+/* IMAGE */
+.cateringCard img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* OVERLAY */
+.cateringOverlay{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  padding:10px;
+
+  box-sizing:border-box;   /* 🔥 FIX */
+
+  background:linear-gradient(
+    to top,
+    rgba(0,0,0,0.7),
+    transparent
+  );
+
+  color:#fff;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+/* TITLE */
+
+
+/* BUTTON */
+.bookNow{
+  margin-top:0;
+  background:#0f5c5c;
+  color:#fff;
+  border:none;
+  padding:6px 12px;
+  border-radius:8px;
+  font-size:11px;
+
+  flex-shrink:0;     /* 🔥 MAIN FIX */
+  white-space:nowrap;/* 🔥 prevent text break */
+}
+/* SIDE HEADING STYLE */
+.photoHeaderSide{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  margin:16px;
+  padding-left:10px;
+
+  border-left:4px solid #0f5c5c;   /* 🔥 side line */
+
+  font-size:17px;
+  font-weight:700;
+  color:#222;
+}
+
+/* ICON */
+.photoHeaderSide i{
+  color:#0f5c5c;
+  font-size:16px;
+}
+/* FULL PAGE POPUP */
+.popupPage{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#fff;
+  z-index:9999;
+  display:none;
+  overflow-y:auto;
+}
+/* 🔥 HIDE SCROLLBAR (POPUP ONLY) */
+.popupPage{
+  -ms-overflow-style: none;   /* IE + Edge */
+  scrollbar-width: none;      /* Firefox */
+}
+
+.popupPage::-webkit-scrollbar{
+  display:none;               /* Chrome, Safari */
+}
+/* HEADER */
+.popupHeader{
+  position:sticky;
+  top:0;
+  background:#fff;
+
+  display:flex;
+  align-items:center;
+
+  padding:12px 16px;
+  padding-top:55px;
+
+  border-bottom:1px solid #eee;
+}
+
+.closeBtn{
+  font-size:20px;
+  cursor:pointer;
+}
+
+.popupTitle{
+  margin-left:auto;
+  text-align:right;
+  line-height:1.2;
+}
+
+/* MAIN TITLE */
+.popupTitle span{
+  display:block;
+  font-size:16px;
+  font-weight:700;
+  color:#111;
+}
+
+/* SUB TEXT */
+.popupTitle small{
+  font-size:11px;
+  color:#777;
+}
+
+/* IMAGE SLIDER */
+/* IMAGE SLIDER */
+.popupSlider{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  gap:12px;
+  padding:0 12px;
+  box-sizing:border-box;
+}
+
+.popupSlider::-webkit-scrollbar{
+  display:none;
+}
+
+.popupSlider img{
+  width:calc(100% - 24px);
+  height:220px;
+  object-fit:cover;
+  flex-shrink:0;
+  scroll-snap-align:center;
+  border-radius:16px;     /* rounded edges */
+}
+
+/* DOTS */
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin:8px 0;
+}
+
+.dots span{
+  width:6px;
+  height:6px;
+  background:#ccc;
+  border-radius:50%;
+}
+
+.dots span.active{
+  background:#0f5c5c;
+}
+
+/* CONTENT */
+.popupContent{
+  padding:16px;
+}
+
+/* PRICE */
+.popupPrice{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+/* SAMPLE */
+.sampleTitle{
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+.sampleScroll{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  margin-bottom:14px;
+}
+
+.sampleScroll::-webkit-scrollbar{
+  display:none;
+}
+
+.sampleScroll img{
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+/* 🔥 SERVICE INCLUDE TITLE */
+.detailTitle{
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:10px;
+}
+/* 🔥 SERVICE LIST (VERTICAL BOX STYLE) */
+.serviceListText{
+  list-style:none;
+  padding:0;
+  margin:0 0 14px;
+}
+
+/* BOX ITEM */
+.serviceListText li{
+  background:#f5f5f5;
+  border-radius:10px;
+
+  padding:10px 12px;
+  margin-bottom:8px;
+
+  font-size:13px;
+  color:#333;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* ✔ ICON */
+.serviceListText li::before{
+  content:"✔";
+  font-size:12px;
+  color:#0f5c5c;
+}
+
+
+
+/* BUTTON */
+.popupBook{
+  width:100%;
+  margin-top:10px;
+
+  background:#0f5c5c;
+  color:#fff;
+  border:none;
+
+  padding:12px;
+  border-radius:10px;
+
+  font-size:14px;
+  font-weight:600;
+}
+
+.popupBook:active{
+  transform:scale(0.97);
+}
+/* 🔥 ROUND BACK BUTTON */
+.closeBtn{
+  width:36px;
+  height:36px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#f2f2f2;
+  border-radius:50%;
+
+  font-size:16px;
+  color:#333;
+
+  cursor:pointer;
+}
+.popupPrice{
+  display:flex;
+  flex-direction:column;
+
+  font-size:18px;
+  font-weight:700;
+  color:#111;
+  margin-bottom:12px;
+}
+
+.popupPrice span{
+  font-size:12px;
+  font-weight:500;
+  color:#777;
+}
+
+/* 🔥 TRUST SECTION */
+.trustRow{
+  display:flex;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+/* ITEM BOX */
+.trustItem{
+  flex:1;
+
+  background:#f7f7f7;
+  border-radius:10px;
+
+  padding:10px 6px;
+
+  text-align:center;
+
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* ICON */
+.trustItem i{
+  font-size:18px;
+  color:#0f5c5c;
+  margin-bottom:5px;
+}
+
+/* TEXT */
+.trustItem span{
+  display:block;
+  font-size:11px;
+  color:#555;
+}
+
+/* 🔥 SIDE HEADING */
+.serviceTypeHeader{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  margin-top:12px;
+  margin-bottom:8px;
+
+  padding-left:10px;
+  border-left:4px solid #0f5c5c;
+
+  font-size:14px;
+  font-weight:600;
+}
+
+.serviceTypeHeader i{
+  color:#0f5c5c;
+  font-size:14px;
+}
+
+/* 🔥 GRID */
+/* 🔥 HORIZONTAL SCROLL */
+.serviceTypeGrid{
+  display:flex;                 /* 🔥 change from grid */
+  overflow-x:auto;              /* enable horizontal scroll */
+  gap:10px;
+
+  padding-bottom:6px;           /* small spacing */
+}
+
+/* ❌ HIDE SCROLLBAR */
+.serviceTypeGrid::-webkit-scrollbar{
+  display:none;                 /* Chrome, Safari */
+}
+
+.serviceTypeGrid{
+  -ms-overflow-style:none;      /* IE */
+  scrollbar-width:none;         /* Firefox */
+}
+
+/* CARD */
+.typeCard{
+  flex:0 0 auto;                /* 🔥 important for scroll */
+  width:90px;                   /* fixed width */
+
+  text-align:center;
+}
+
+/* IMAGE */
+.typeCard img{
+  width:100%;
+  height:80px;
+  object-fit:cover;
+
+  border-radius:10px;
+}
+.serviceTypeGrid{
+  scroll-snap-type:x mandatory;
+}
+
+.typeCard{
+  scroll-snap-align:start;
+}
+/* TEXT */
+.typeCard span{
+  display:block;
+  margin-top:5px;
+
+  font-size:12px;
+  color:#333;
+}
+.serviceTypeGrid{
+  scroll-behavior:smooth;
+}
+
+/* FULL SCREEN IMAGE VIEW */
+.imgViewer{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+
+  background:rgba(0,0,0,0.9); /* 🔥 transparent dark */
+
+  display:none;
+  align-items:center;
+  justify-content:center;
+
+  z-index:99999;
+}
+
+/* IMAGE */
+.imgViewer img{
+  max-width:90%;
+  max-height:80%;
+  border-radius:10px;
+}
+
+/* CLOSE BUTTON */
+.imgClose{
+  position:absolute;
+  top:55px;   /* 🔥 your requirement */
+  left:16px;
+
+  font-size:22px;
+  color:#fff;
+
+  background:rgba(255,255,255,0.2);
+  padding:8px;
+  border-radius:50%;
+}
+/* SLIDER */
+.imgSliderViewer{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+
+  width:100%;
+  height:100%;
+
+  align-items:center;
+}
+
+.imgSliderViewer::-webkit-scrollbar{
+  display:none;
+}
+
+/* IMAGE */
+.imgSliderViewer img{
+  width:100%;
+  max-height:80%;
+
+  object-fit:contain;
+
+  flex-shrink:0;
+  scroll-snap-align:center;
+}
+/* LOADER BACKGROUND */
+.appLoader{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+
+  background:#fff;
+  z-index:999999;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* 🌸 FLOWER */
+.flowerLoader{
+  position:relative;
+  width:50px;
+  height:50px;
+}
+
+.flowerLoader span{
+  position:absolute;
+  width:18px;
+  height:18px;
+
+  background:#0f5c5c;
+  border-radius:50%;
+
+  animation:flower 1.2s infinite ease-in-out;
+}
+
+/* PETALS POSITION */
+.flowerLoader span:nth-child(1){
+  top:0;
+  left:16px;
+}
+
+.flowerLoader span:nth-child(2){
+  right:0;
+  top:16px;
+}
+
+.flowerLoader span:nth-child(3){
+  bottom:0;
+  left:16px;
+}
+
+.flowerLoader span:nth-child(4){
+  left:0;
+  top:16px;
+}
+
+/* ANIMATION */
+@keyframes flower{
+  0%, 100%{
+    transform:scale(0.8);
+    opacity:0.6;
+  }
+  50%{
+    transform:scale(1.3);
+    opacity:1;
+  }
+}
+.flowerLoader span{
+  background:#ff7eb3;
+}
+.flowerLoader::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+
+  width:8px;
+  height:8px;
+
+  background:#222;
+  border-radius:50%;
+
+  transform:translate(-50%,-50%);
+}
+/* DELAY FOR ROTATION EFFECT */
+.flowerLoader span:nth-child(1){ animation-delay:0s; }
+.flowerLoader span:nth-child(2){ animation-delay:0.2s; }
+.flowerLoader span:nth-child(3){ animation-delay:0.4s; }
+.flowerLoader span:nth-child(4){ animation-delay:0.6s; }
+
+/* 🔥 SIDE HEADING */
+.whatGetHeader{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  margin-top:14px;
+  margin-bottom:8px;
+
+  padding-left:10px;
+  border-left:4px solid #0f5c5c;
+
+  font-size:14px;
+  font-weight:600;
+}
+
+.whatGetHeader i{
+  color:#0f5c5c;
+}
+
+/* 🔥 LIST */
+.whatGetList{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+/* ITEM */
+.whatItem{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  background:#f5f5f5;
+  padding:10px;
+
+  border-radius:10px;
+  font-size:13px;
+  color:#333;
+}
+
+/* ICON */
+.whatItem i{
+  color:#0f5c5c;
+}
+.whatItem{
+  background:#eef6f6;
+}
+
+/* 🔥 HEADER CONTAINER */
+.whatGetHeaderNew{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  margin-top:14px;
+  margin-bottom:10px;
+}
+
+/* ICON BOX */
+.iconBox{
+  width:32px;
+  height:32px;
+
+  background:#0f5c5c;
+  color:#fff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:8px;
+  font-size:14px;
+}
+
+/* TEXT */
+.textBox span{
+  font-size:15px;
+  font-weight:700;
+  color:#111;
+}
+
+/* UNDERLINE ACCENT */
+.textBox{
+  position:relative;
+}
+
+.textBox::after{
+  content:"";
+  position:absolute;
+  bottom:-4px;
+  left:0;
+
+  width:40px;
+  height:3px;
+
+  background:#0f5c5c;
+  border-radius:2px;
+}
+/* 🔥 GLOBAL FIX (important) */
+body{
+  overflow-x:hidden;   /* ❌ remove side scroll */
+}
+
+/* 🔥 FOOTER */
+.footerBlock{
+  width:100%;                /* 🔥 ensure full width */
+  box-sizing:border-box;     /* include padding inside width */
+
+  margin-top:20px;
+  padding:14px 16px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  border-top:1px solid #eee;
+  background:#fafafa;
+
+  overflow:hidden;           /* 🔥 prevent overflow */
+}
+
+/* LEFT */
+.footerLeft{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  min-width:0;               /* 🔥 prevents overflow */
+}
+
+.footerIcon{
+  font-size:18px;
+  color:#0f5c5c;
+}
+
+.footerName{
+  font-size:16px;
+  font-weight:700;
+  color:#111;
+}
+
+/* RIGHT */
+.footerRight{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+
+  min-width:0;               /* 🔥 important */
+}
+
+/* ROW */
+.footerRow{
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  font-size:11px;
+  color:#555;
+
+  white-space:nowrap;        /* 🔥 prevent breaking */
+}
+
+.footerRow i{
+  font-size:12px;
+  color:#0f5c5c;
+}
+/* 🔥 WRAPPER */
+.hwTypeWrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
+}
+
+/* 🔥 ITEM BOX */
+.hwItem{
+  padding:10px 14px;
+
+  background:#f5f5f5;
+  border-radius:10px;
+
+  font-size:13px;
+  font-weight:500;
+  color:#333;
+
+  flex:0 0 auto;
+
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* 🔥 HOVER / TAP EFFECT */
+.hwItem:active{
+  transform:scale(0.95);
+}
+
+/* 🔥 OPTIONAL (premium look) */
+.hwItem{
+  background:#eef6f6;
+  color:#0f5c5c;
+}
+/* WRAP */
+.festivalFAQ{
+  margin-top:16px;
+}
+
+/* ITEM */
+.faqItem{
+  border-bottom:1px solid #eee;
+}
+
+/* HEADER */
+.faqHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:12px 4px;
+
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* ICON */
+.faqHeader i{
+  font-size:12px;
+  transition:0.3s;
+}
+
+/* CONTENT */
+.faqContent{
+  max-height:0;
+  overflow:hidden;
+
+  font-size:13px;
+  color:#555;
+
+  transition:max-height 0.3s ease;
+}
+
+/* OPEN STATE */
+.faqItem.active .faqContent{
+  max-height:100px;
+  margin-bottom:10px;
+}
+
+/* ROTATE ICON */
+.faqItem.active i{
+  transform:rotate(180deg);
+}
+/* SIDE HEADING */
+.faqHeading{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  margin-top:16px;
+  margin-bottom:8px;
+
+  padding-left:10px;
+  border-left:4px solid #0f5c5c;
+
+  font-size:14px;
+  font-weight:600;
+}
+
+.faqHeading i{
+  color:#0f5c5c;
+}
+
+
+
+/* Wrapper (important for spacing) */
+.riceWrap{
+  padding:12px;
+}
+
+/* Card */
+.riceItem{
+  display:flex;
+  gap:12px;
+  width:100%;
+  max-width:100%;              /* prevent overflow */
+  padding:12px;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 4px 14px rgba(0,0,0,0.08);
+  align-items:center;
+  margin-bottom:12px;
+  box-sizing:border-box;       /* IMPORTANT */
+}
+
+/* Image */
+.riceThumb{
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:12px;
+  flex-shrink:0;
+}
+
+/* Content */
+.riceInfo{
+  flex:1;
+  min-width:0; /* prevents text overflow */
+}
+
+/* Text */
+.riceName{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:4px;
+}
+
+.riceText{
+  font-size:13px;
+  color:#666;
+  margin-bottom:8px;
+}
+
+/* Bottom row */
+.riceRow{
+  display:flex;
+  justify-content:flex-end; /* button goes to right */
+  align-items:center;
+}
+
+/* Price */
+.riceCost{
+  font-size:15px;
+  font-weight:600;
+  color:#e91e63;
+}
+
+/* Button */
+.riceAdd{
+  padding:6px 12px;
+  border:none;
+  background:#e91e63;
+  color:#fff;
+  border-radius:8px;
+  font-size:13px;
+  cursor:pointer;
+}
+
+/* Tap effect */
+.riceAdd:active{
+  transform:scale(0.95);
+}
+.riceSideHead{
+  font-size:18px;
+  font-weight:600;
+  margin:16px 12px 8px;
+  color:#333;
+  position:relative;
+}
+
+/* optional underline style */
+.riceSideHead::after{
+  content:"";
+  display:block;
+  width:40px;
+  height:3px;
+  background:#e91e63;
+  margin-top:4px;
+  border-radius:2px;
+}
+.ricePlateBox{
+  width:100%;
+  margin:12px 0;              /* remove side gaps */
+  padding:12px;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.06);
+  box-sizing:border-box;      /* prevents overflow */
+}
+
+/* Title */
+.ricePlateTitle{
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:6px;
+  color:#333;
+}
+
+/* Input */
+.ricePlateInput{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #e0e0e0;
+  font-size:14px;
+  outline:none;
+  box-sizing:border-box;
+}
+
+/* Focus effect */
+.ricePlateInput:focus{
+  border-color:#e91e63;
+  box-shadow:0 0 0 2px rgba(233,30,99,0.1);
+}
+.riceBillBox{
+  width:100%;
+  margin:12px 0;
+  padding:14px;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.06);
+  box-sizing:border-box;
+}
+
+.riceBillTitle{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:10px;
+  color:#000;
+}
+
+.riceBillRow{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin-bottom:6px;
+  color:#555;
+}
+
+.riceBillTotal{
+  display:flex;
+  justify-content:space-between;
+  font-size:15px;
+  font-weight:700;
+  margin-top:10px;
+  padding-top:8px;
+  border-top:1px solid #eee;
+  color:#e91e63;
+}
+.riceBookNow{
+  width:100%;
+  margin:16px 0 20px;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#e91e63;
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(233,30,99,0.3);
+  transition:0.2s;
+}
+
+.riceBookNow:active{
+  transform:scale(0.97);
+}
+.shake{
+  animation:shake 0.4s;
+}
+
+@keyframes shake{
+  0% { transform:translateX(0); }
+  25% { transform:translateX(-5px); }
+  50% { transform:translateX(5px); }
+  75% { transform:translateX(-5px); }
+  100% { transform:translateX(0); }
+}
+.riceToggleRow{
+  display:flex;
+  gap:10px;
+}
+
+.riceToggleBtn{
+  flex:1;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  background:#f5f5f5;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.riceToggleBtn.active{
+  background:#0f5c5c;
+  color:#fff;
+  border-color:#0f5c5c;
+}
+.cameraSection{
+  margin-top:20px;
+}
+
+.cameraTitle{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:14px;
+  color:#111;
+}
+
+.cameraWrap{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.cameraItem{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  background:#fff;
+  padding:14px;
+  border-radius:14px;
+
+  box-shadow:0 2px 10px rgba(0,0,0,0.06);
+}
+
+.cameraItem i{
+  font-size:20px;
+  color:#ff4d6d;
+}
+
+.cameraItem p{
+  font-size:14px;
+  font-weight:500;
+  color:#222;
+  line-height:1.4;
+}
+.shootInfoSection{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  margin-top:24px;
+}
+
+.shootInfoCard{
+  position:relative;
+  overflow:hidden;
+
+  padding:24px 20px;
+  border-radius:24px;
+
+  color:#fff;
+
+  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+
+.shootInfoCard h3{
+  font-size:22px;
+  font-weight:700;
+  margin-bottom:12px;
+  line-height:1.3;
+}
+
+.shootInfoCard p{
+  font-size:14px;
+  line-height:1.7;
+  opacity:0.96;
+}
+
+/* THEMES */
+
+.weddingTheme{
+  background:linear-gradient(135deg,#ff4d6d,#ff758f);
+}
+
+.casualTheme{
+  background:linear-gradient(135deg,#5b86ff,#7f9cff);
+}
+
+.fashionTheme{
+  background:linear-gradient(135deg,#8e44ad,#b06ab3);
+}
+
+.eventTheme{
+  background:linear-gradient(135deg,#ff9966,#ff5e62);
+}
+
+.droneTheme{
+  background:linear-gradient(135deg,#11998e,#38ef7d);
+}
+/* FULL POPUP */
+.bookingPopup{
+  position:fixed;
+  top:0;
+  left:0;
+
+  width:100%;
+  height:100%;
+
+  background:#fff;
+
+  z-index:999999;
+
+  display:none;
+  flex-direction:column;
+
+  overflow-y:auto;
+
+  -webkit-overflow-scrolling:touch;
+}
+
+/* HEADER */
+.bookingHeader{
+  position:sticky;
+  top:0;
+
+  background:#fff;
+
+  padding:18px 16px;
+  padding-top:55px;
+
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  border-bottom:1px solid #eee;
+
+  z-index:10;
+}
+
+/* CLOSE */
+.bookingClose{
+  width:38px;
+  height:38px;
+
+  border-radius:50%;
+
+  background:#f5f5f5;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:18px;
+  color:#222;
+
+  cursor:pointer;
+}
+
+/* TITLE */
+.bookingHeader h2{
+  font-size:20px;
+  font-weight:700;
+  color:#111;
+}
+
+/* CONTENT */
+.bookingContent{
+  padding:18px 16px 30px;
+}
+
+/* FIELD */
+.bookingField{
+  margin-bottom:18px;
+}
+
+/* LABEL */
+.bookingField label{
+  display:block;
+
+  font-size:14px;
+  font-weight:600;
+
+  margin-bottom:8px;
+
+  color:#222;
+}
+
+/* INPUT */
+.bookingField input,
+.bookingField textarea{
+  width:100%;
+
+  padding:14px;
+
+  border-radius:14px;
+  border:1px solid #e4e4e4;
+
+  font-size:14px;
+
+  outline:none;
+  box-sizing:border-box;
+
+  font-family:'Outfit',sans-serif;
+}
+
+/* TEXTAREA */
+.bookingField textarea{
+  min-height:110px;
+  resize:none;
+}
+
+/* DETECT BUTTON */
+.detectBtn{
+  width:100%;
+
+  border:none;
+
+  background:#0f5c5c;
+  color:#fff;
+
+  padding:14px;
+
+  border-radius:14px;
+
+  font-size:14px;
+  font-weight:600;
+
+  margin-bottom:10px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+/* ORDER BUTTON */
+.placeOrderBtn{
+  width:100%;
+
+  border:none;
+
+  background:#ff4d6d;
+  color:#fff;
+
+  padding:15px;
+
+  border-radius:16px;
+
+  font-size:16px;
+  font-weight:700;
+}
+/* SELECT FIELDS */
+
+.bookingField select{
+
+  width:100%;
+
+  padding:14px 16px;
+
+  border:none;
+
+  outline:none;
+
+  border-radius:14px;
+
+  background:#f5f5f5;
+
+  font-size:15px;
+
+  color:#222;
+
+  margin-top:8px;
+
+  font-family:inherit;
+
+  transition:0.3s;
+
+  cursor:pointer;
+
+}
+
+
+
+/* FOCUS EFFECT */
+
+.bookingField select:focus{
+
+  background:#fff;
+
+  box-shadow:0 0 0 2px #ff4d6d33;
+
+}
+
+
+
+/* OPTION STYLE */
+
+.bookingField select option{
+
+  color:#222;
+
+}
+
+
+
+/* HIDDEN FIELDS */
+
+#decorationTypeField,
+#eventTypeField{
+
+  display:none;
+
+}
+</style>
+</head>
+
+<body>
+<div class="topSection">
+  <img src="services/services 1.webp" class="topBg">
+
+<div class="topGap"></div>
+
+<!-- LOCATION -->
+<div class="locationBox">
+  <div class="locRow">
+    <i class="fa-solid fa-location-dot"></i>
+    <div>
+      <div class="city" id="city">Your City</div>
+      <div class="address" id="address">Loading location...</div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- 🎥 VIDEO SECTION -->
+<div class="videoBox">
+  <video autoplay muted loop playsinline>
+    <source src="services/service.webm" type="video/webm">
+  </video>
+</div>
+<div class="sectionHeader">
+  <h2>Event Services</h2>
+  <div class="line"></div>
+</div>
+
+<!-- SERVICES -->
+<div class="serviceList">
+
+ <div class="serviceCard" onclick="openPopup('balloonPopup')">
+
+  <div class="imgSlider">
+    <img src="services/ballons1.webp" class="active">
+    <img src="services/ballon2.webp">
+     <img src="services/ballon3.webp">
+  </div>
+
+  <div class="cardOverlay">
+    <div class="title">Ballons Decoration</div>
+    <div class="tags">
+  <span>Birthday Parties</span>
+  <span>Marriage Events</span>
+  <span>Decorations</span>
+</div>
+
+    <div class="priceRow">
+      <div class="price">Starting from ₹1499</div>
+      <button class="bookBtn">Book</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="serviceCard" onclick="openPopup('flowerPopup')">
+
+
+  <div class="imgSlider">
+    <img src="services/flowers1.webp" class="active">
+    <img src="services/flowers1.webp">
+    <img src="services/flowers2.webp">
+  </div>
+
+  <div class="cardOverlay">
+    <div class="title">Flower Decoration</div>
+
+    <div class="tags">
+      <span>Wedding Stage</span>
+      <span>Mandap Setup</span>
+      <span>Fresh Flowers</span>
+    </div>
+
+    <div class="priceRow">
+      <div class="price">Starting from ₹2999</div>
+      <button class="bookBtn">Book</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="serviceCard" onclick="openPopup('ledPopup')">
+
+  <div class="imgSlider">
+    <img src="services/led1.webp" class="active">
+     <img src="services/led2.webp">
+   <img src="services/led3.webp">
+  </div>
+
+  <div class="cardOverlay">
+    <div class="title">LED Decoration</div>
+
+    <div class="tags">
+      <span>Birthday Parties</span>
+      <span>Theme Setup</span>
+      <span>Balloons</span>
+    </div>
+
+    <div class="priceRow">
+      <div class="price">Starting from ₹4000</div>
+      <button class="bookBtn">Book</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="serviceCard" onclick="openPopup('housewarmPopup')">
+
+  <div class="imgSlider">
+    <img src="services/housewarm1.webp" class="active">
+     <img src="services/housewarming2.webp">
+   
+  </div>
+
+  <div class="cardOverlay">
+    <div class="title">House Warming Decoration</div>
+
+    <div class="tags">
+      <span>House Openining</span>
+      <span>House Construction</span>
+    </div>
+
+    <div class="priceRow">
+      <div class="price">Starting from ₹1500</div>
+      <button class="bookBtn">Book</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="serviceCard" onclick="openPopup('templePopup')">
+
+
+  <div class="imgSlider">
+    <img src="services/temples1.webp" class="active">
+     <img src="services/temples2.webp">
+  </div>
+
+  <div class="cardOverlay">
+    <div class="title">Temple Decoration</div>
+
+    <div class="tags">
+      <span>All Temples</span>
+    
+    </div>
+
+    <div class="priceRow">
+      <div class="price">Starting from ₹2000</div>
+      <button class="bookBtn">Book</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="serviceCard" onclick="openPopup('suprisePopup')">
+
+  <div class="imgSlider">
+    <img src="services/Surprise Room Setup1.webp" class="active">
+     <img src="services/Surprise Room Setup2.webp">
+   <img src="services/Surprise Room Setup3.webp">
+  </div>
+
+  <div class="cardOverlay">
+    <div class="title">Surprise Room Setup</div>
+
+    <div class="tags">
+      <span>Birthday Parties</span>
+      <span>Aniversary Day</span>
+      <span>Suprise</span>
+    </div>
+
+    <div class="priceRow">
+      <div class="price">Starting from ₹1600</div>
+      <button class="bookBtn">Book</button>
+    </div>
+  </div>
+
+</div>
+
+
+
+ 
+
+  
+
+</div>
+
+</div>
+<div class="sectionHeader">
+  <h2>Event Booking</h2>
+  <div class="line"></div>
+</div>
+</div>
+
+
+
+<!-- SERVICES 2 -->
+<div class="serviceList">
+
+ <div class="serviceCard" onclick="openPopup('marriagePopup')">
+
+  <div class="videoCard">
+  <video src="services/wedding video.mp4" autoplay muted loop playsinline></video>
+</div>
+  <div class="cardOverlay">
+    <div class="title">Marriage Event</div>
+    <div class="tags">
+  <span>Decoartion</span>
+  <span>Food Supplies</span>
+  <span>Sound System</span>
+</div>
+
+    <div class="priceRow">
+      <div class="price">Starting from ₹20000</div>
+      <button class="bookBtn">Book</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="serviceCard" onclick="openPopup('receptionPopup')">
+
+ <div class="videoCard">
+  <video src="services/recption event.mp4" autoplay muted loop playsinline></video>
+</div>
+
+  <div class="cardOverlay">
+    <div class="title">Reception Event</div>
+
+    <div class="tags">
+      <span>Wedding Stage</span>
+      <span>Mandap Setup</span>
+      <span>Fresh Flowers</span>
+    </div>
+
+    <div class="priceRow">
+      <div class="price">Starting from ₹9000</div>
+      <button class="bookBtn">Book</button>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+ 
+</div>
+<div class="makeupHeader">
+  <h2>Makeup Services</h2>
+</div>
+<div class="makeupGrid">
+
+  <!-- MEN -->
+  <div class="makeupCard" onclick="openPopup('menmakeupPopup')">
+    <video src="services/menmakep.mp4 " autoplay muted loop playsinline></video>
+
+    <div class="makeupContent">
+      <div class="makeupTitle">Men Makeup</div>
+      <button class="bookNow">Book Now</button>
+    </div>
+  </div>
+
+  <!-- FEMALE -->
+ <div class="makeupCard" onclick="openPopup('femalemakeupPopup')">
+    <video src="services/feamlemakeup.mp4" autoplay muted loop playsinline></video>
+
+    <div class="makeupContent">
+      <div class="makeupTitle">Female Makeup</div>
+      <button class="bookNow">Book Now</button>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="cateringHeader">
+  <span><i class="fa-solid fa-utensils"></i> CATERING</span>
+  <h2>Services</h2>
+</div>
+
+<div class="cateringWrap">
+
+  <div class="cateringCenter">
+    <div class="cateringCard center" onclick="openPopup('vegPopup')">
+      
+      <img src="services/vegcat1.webp">
+      
+      <div class="cateringOverlay">
+        <div class="cateringTitle">Catering Services</div>
+        <button class="bookNow">Book Now</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="photoHeaderSide">
+  <i class="fa-solid fa-camera"></i>
+  <span>Photography & Videography</span>
+</div>
+
+<div class="serviceList">
+
+ <div class="serviceCard" onclick="openPopup('photoPopup')">
+
+  <div class="imgSlider">
+    <img src="services/photo1.webp" class="active">
+    <img src="services/photo2.webp">
+     <img src="services/photo3.webp">
+  </div>
+
+  <div class="cardOverlay">
+    <div class="title">Photo Shoot</div>
+    <div class="tags">
+  <span>Birthday Events</span>
+  <span>Recption</span>
+  <span>Marriages</span>
+</div>
+
+    <div class="priceRow">
+      <div class="price">Starting from ₹400</div>
+      <button class="bookBtn">Book</button>
+    </div>
+  </div>
+
+</div>
+
+ <div class="serviceCard" onclick="openPopup('videoPopup')">
+
+  <div class="videoCard">
+  <video src="services/videoshoot1.mp4" autoplay muted loop playsinline></video>
+</div>
+
+  <div class="cardOverlay">
+    <div class="title">Video Shotting</div>
+
+    <div class="tags">
+      <span>Wedding Shooting</span>
+      <span>Party Shooting</span>
+      <span>Events Shooting</span>
+    </div>
+
+    <div class="priceRow">
+      <div class="price">Starting from ₹2999</div>
+      <button class="bookBtn">Book</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- NAVBAR -->
+<div class="bottomNav">
+  <div class="navItem" id="homeBtn">
+    <i class="fa-solid fa-house"></i>
+    <span>Home</span>
+  </div>
+
+  <div class="navItem active">
+    <i class="fa-solid fa-screwdriver-wrench"></i>
+    <span>Services</span>
+  </div>
+
+  <div class="navItem">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span>Cart</span>
+  </div>
+
+  <div class="navItem">
+    <i class="fa-solid fa-user"></i>
+    <span>Profile</span>
+  </div>
+</div>
+
+
+<div id="balloonPopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+<i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Balloons Decoration</span>
+  <small>Event Setup Service</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="services/ballons1.webp">
+    <img src="services/ballon2.webp">
+    <img src="services/ballon3.webp">
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1499
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="sample1/4.webp" onclick="openImage(this)">
+ <img src="sample1/2.webp" onclick="openImage(this)">
+ <img src="sample1/10.webp" onclick="openImage(this)">
+ <img src="sample1/9.webp" onclick="openImage(this)">
+ <img src="sample1/8.webp" onclick="openImage(this)">
+ <img src="sample1/7.webp" onclick="openImage(this)">
+ <img src="sample1/6.webp" onclick="openImage(this)">
+ <img src="sample1/5.webp" onclick="openImage(this)">
+ <img src="sample1/1.webp" onclick="openImage(this)">
+ <img src="sample1/3.webp" onclick="openImage(this)">
+</div>
+
+    <!-- DETAILS -->
+    <div class="detailTitle">Service Includes :</div>
+
+    <ul class="serviceListText">
+      <li>100+ Balloons Setup</li>
+      <li>All Shapes Available</li>
+      <li>Theme Decoration</li>
+      <li>Wall & Ceiling Setup</li>
+      <li>Name Customization</li>
+      <li>Quick Installation</li>
+    </ul>
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="serviceTypeGrid">
+
+  <div class="typeCard">
+    <img src="services/bhirthdayevnt.webp">
+    <span>Birthday Event</span>
+  </div>
+
+  <div class="typeCard">
+    <img src="services/marriage event.webp">
+    <span>Marriage</span>
+  </div>
+
+  <div class="typeCard">
+    <img src="services/anversiary.webp">
+    <span>Anniversary</span>
+  </div>
+
+  <div class="typeCard">
+    <img src="services/house party.webp">
+    <span>House Party</span>
+  </div>
+
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+    <span>Package Includes</span>
+  </div>
+</div>
+
+<div class="whatGetList">
+  <div class="whatItem"><i class="fa-solid fa-utensils"></i> Food Arrangement</div>
+  <div class="whatItem"><i class="fa-solid fa-music"></i> Sound System</div>
+  <div class="whatItem"><i class="fa-solid fa-wand-magic-sparkles"></i> Decoration Setup</div>
+  <div class="whatItem"><i class="fa-solid fa-truck-fast"></i> Free Setup & Delivery</div>
+</div>
+    <button class="popupBook" id="balloonBookBtn">Book Now</button>
+
+  </div>
+
+</div>
+
+
+<!-- 2nd popup -->
+
+
+<div id="flowerPopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Flowers Decoration</span>
+  <small>Event Setup Service</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="services/flowers1.webp">
+    <img src="services/flowers2.webp">
+    <img src="services/flowers3.webp">
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1499
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="sample1/25.webp" onclick="openImage(this)">
+ <img src="sample1/24.webp" onclick="openImage(this)">
+ <img src="sample1/23.webp" onclick="openImage(this)">
+ <img src="sample1/22.webp" onclick="openImage(this)">
+ <img src="sample1/23.webp" onclick="openImage(this)">
+ <img src="sample1/22.webp" onclick="openImage(this)">
+ <img src="sample1/21.webp" onclick="openImage(this)">
+ <img src="sample1/20.webp" onclick="openImage(this)">
+ <img src="sample1/19.webp" onclick="openImage(this)">
+ <img src="sample1/18.webp" onclick="openImage(this)">
+ <img src="sample1/17.webp" onclick="openImage(this)">
+ <img src="sample1/16.webp" onclick="openImage(this)">
+ <img src="sample1/15.webp" onclick="openImage(this)">
+ <img src="sample1/14.webp" onclick="openImage(this)">
+ <img src="sample1/13.webp" onclick="openImage(this)">
+ <img src="sample1/12.webp" onclick="openImage(this)">
+ <img src="sample1/11.webp" onclick="openImage(this)">
+</div>
+
+    <!-- DETAILS -->
+    <div class="detailTitle">Service Includes :</div>
+
+<ul class="serviceListText">
+  <li>Fresh Flower Setup</li>
+  <li>Stage & Backdrop Decoration</li>
+  <li>Entrance Floral Design</li>
+  <li>Mandap Flower Decoration</li>
+  <li>Custom Theme Arrangement</li>
+  <li>Quick Installation Service</li>
+    <li>Same Day Setup Available</li>
+      <li>Floral Stage Setup</li>
+
+
+</ul>
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+ <div class="serviceTypeGrid">
+
+  <div class="typeCard">
+    <img src="sample1/Stage Decoration.webp">
+Stage Decoration</span>
+  </div>
+
+ <div class="typeCard">
+    <img src="sample1/Entrance Decoration.webp">
+Entrance Decoration </span>
+  </div>
+ <div class="typeCard">
+    <img src="sample1/Ceiling  Decorations.webp">
+ Ceiling Decorations </span>
+  </div>
+
+ <div class="typeCard">
+    <img src="sample1/Garlands & Strings.webp">
+ Car Decoration</span>
+  </div>
+
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+    <span>Package Includes</span>
+  </div>
+</div>
+
+<div class="whatGetList">
+
+  <div class="whatItem">
+    <i class="fa-solid fa-seedling"></i>
+    Fresh Flower Arrangement
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-spa"></i>
+    Premium Floral Designs
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-wand-magic-sparkles"></i>
+    Theme-Based Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-truck-fast"></i>
+    Free Setup & Installation
+  </div>
+
+</div>
+    <button class="popupBook" id="flowerBookBtn">Book Now</button>
+
+  </div>
+
+</div>
+
+
+<!--3rd popup-->
+
+
+<div id="ledPopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>LED Decoration</span>
+  <small>Event Setup Service</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="services/led1.webp">
+    <img src="services/led2.webp">
+    <img src="services/led3.webp">
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1499
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="sample1/26.webp" onclick="openImage(this)">
+ <img src="sample1/27.webp" onclick="openImage(this)">
+ <img src="sample1/28.webp" onclick="openImage(this)">
+ <img src="sample1/29.webp" onclick="openImage(this)">
+ <img src="sample1/30.webp" onclick="openImage(this)">
+ <img src="sample1/31.webp" onclick="openImage(this)">
+ <img src="sample1/32.webp" onclick="openImage(this)">
+ <img src="sample1/33.webp" onclick="openImage(this)">
+ <img src="sample1/34.webp" onclick="openImage(this)">
+ <img src="sample1/35.webp" onclick="openImage(this)">
+ <img src="sample1/36.webp" onclick="openImage(this)">
+
+</div>
+
+    <!-- DETAILS -->
+   <div class="detailTitle">Service Includes :</div>
+
+<ul class="serviceListText">
+  <li>LED Light Setup</li>
+  <li>Wall & Ceiling Lighting</li>
+  <li>Stage & Backdrop Lighting</li>
+  <li>Color Theme Lighting Effects</li>
+  <li>Outdoor & Indoor Setup</li>
+  <li>Quick Installation Service</li>
+    <li>Fast Setup & Support</li>
+
+</ul>
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="serviceTypeGrid">
+
+  <div class="typeCard">
+    <img src="sample1/Building Decoration.webp">
+Street Lights</span>
+  </div>
+
+ <div class="typeCard">
+    <img src="sample1/Curtain.webp">
+Curtain Lights</span>
+  </div>
+ <div class="typeCard">
+    <img src="sample1/Wall Setup .webp">
+ Wall Setup </span>
+  </div>
+
+ <div class="typeCard">
+    <img src="sample1/Stage Lighting.webp">
+ Stage Lighting</span>
+  </div>
+ <div class="typeCard">
+    <img src="sample1/Building Decoration.webp">
+Building Decoration</span>
+  </div>
+
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+    <span>Package Includes</span>
+  </div>
+</div>
+
+<div class="whatGetList">
+
+  <div class="whatItem">
+    <i class="fa-solid fa-lightbulb"></i>
+    LED Lighting Setup
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-palette"></i>
+    Color Theme Lighting
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-bolt"></i>
+    Dynamic Light Effects
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-truck-fast"></i>
+    Free Setup & Installation
+  </div>
+
+</div>
+   <button class="popupBook" id="ledBookBtn">Book Now</button>
+
+  </div>
+
+</div>
+
+
+<!-- 4th popup-->
+
+
+
+<div id="housewarmPopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>House Warming Decoration</span>
+  <small>Event Setup Service</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="services/housewarm1.webp">
+    <img src="services/housewarming2.webp">
+    
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1499
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="house /1.webp" onclick="openImage(this)">
+ <img src="house /2.webp" onclick="openImage(this)">
+ <img src="house /3.webp" onclick="openImage(this)">
+ <img src="house /4.webp" onclick="openImage(this)">
+ <img src="house /5.webp" onclick="openImage(this)">
+ <img src="house /6.webp" onclick="openImage(this)">
+ <img src="house /7.webp" onclick="openImage(this)">
+ <img src="house /8.webp" onclick="openImage(this)">
+ 
+
+</div>
+
+    <!-- DETAILS -->
+   <div class="detailTitle">Service Includes :</div>
+
+<ul class="serviceListText">
+  <li>LED Light Setup</li>
+  <li>Wall & Ceiling Lighting</li>
+  <li>Stage & Backdrop Lighting</li>
+  <li>Color Theme Lighting Effects</li>
+  <li>Outdoor & Indoor Setup</li>
+  <li>Quick Installation Service</li>
+    <li>Fast Setup & Support</li>
+
+</ul>
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="serviceTypeGrid">
+
+  <div class="typeCard">
+    <img src="house /Flower Entrance Decoration.webp">
+Flower Entrance</span>
+  </div>
+
+ <div class="typeCard">
+    <img src="house /Door Toran.webp">
+Door Toran</span>
+  </div>
+ <div class="typeCard">
+    <img src="house /Stage Setup.webp">
+ Mandap Setup</span>
+  </div>
+
+ <div class="typeCard">
+    <img src="house /interior dec.webp">
+Rangoli Design</span>
+  </div>
+ <div class="typeCard">
+    <img src="house /wall dec.webp">
+Home Decoration</span>
+  </div>
+
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+    <span>Package Includes</span>
+  </div>
+</div>
+
+<div class="whatGetList">
+
+  <div class="whatItem">
+    <i class="fa-solid fa-spa"></i>
+    Flower Entrance Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-archway"></i>
+    Welcome Gate Setup
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-seedling"></i>
+    Traditional Toran & Leaves
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-palette"></i>
+    Rangoli Design Setup
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-house"></i>
+    Home Interior Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-truck-fast"></i>
+    Free Setup & Installation
+  </div>
+
+</div>
+
+   <button class="popupBook" id="housewarmBookBtn">Book Now</button>
+
+  </div>
+
+</div>
+
+
+
+
+<!--5th popup-->
+
+
+
+<div id="templePopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Temple Decoration</span>
+  <small>Event Setup Service</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="services/temples1.webp">
+    <img src="services/temples2.webp">
+    
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1499
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="temple/1.webp" onclick="openImage(this)">
+  <img src="temple/2.webp" onclick="openImage(this)">
+  <img src="temple/3.webp" onclick="openImage(this)">
+  <img src="temple/4.webp" onclick="openImage(this)">
+  <img src="temple/5.webp" onclick="openImage(this)">
+  <img src="temple/6.webp" onclick="openImage(this)">
+  <img src="temple/7.webp" onclick="openImage(this)">
+  <img src="temple/8.webp" onclick="openImage(this)">
+ 
+
+</div>
+
+    <!-- DETAILS -->
+   <div class="detailTitle">Service Includes :</div>
+
+<ul class="serviceListText">
+  <li>LED Light Setup</li>
+  <li>Wall & Ceiling Lighting</li>
+  <li>Stage & Backdrop Lighting</li>
+  <li>Color Theme Lighting Effects</li>
+  <li>Outdoor & Indoor Setup</li>
+  <li>Quick Installation Service</li>
+    <li>Fast Setup & Support</li>
+
+</ul>
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="hwTypeWrap">
+
+  <div class="hwItem">Flower Garland Setup</div>
+  <div class="hwItem">Temple Entrance Decoration</div>
+  <div class="hwItem">Pooja Mandap Setup</div>
+  <div class="hwItem">Deepam & Lighting Setup</div>
+  <div class="hwItem">Idol Decoration</div>
+  <div class="hwItem">Festive Theme Decoration</div>
+
+</div>
+ <div class="faqHeading">
+  <i class="fa-solid fa-sparkles"></i>
+  <span>Festival Decorations</span>
+</div>
+<div class="festivalFAQ">
+
+  <div class="faqItem">
+    <div class="faqHeader" onclick="toggleFAQ(this)">
+      <span>Dasara</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+    <div class="faqContent">
+      Flower decoration, stage setup, lighting, and traditional theme designs.
+    </div>
+  </div>
+
+  <div class="faqItem">
+    <div class="faqHeader" onclick="toggleFAQ(this)">
+      <span>Vinayaka Chavithi</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+    <div class="faqContent">
+      Ganesh idol decoration, mandap setup, flowers, and lighting.
+    </div>
+  </div>
+
+  <div class="faqItem">
+    <div class="faqHeader" onclick="toggleFAQ(this)">
+      <span>Diwali</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+    <div class="faqContent">
+      LED lighting, diyas setup, entrance decoration, and rangoli.
+    </div>
+  </div>
+
+  <div class="faqItem">
+    <div class="faqHeader" onclick="toggleFAQ(this)">
+      <span>Sankranti</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+    <div class="faqContent">
+      Rangoli, kite theme decoration, entrance setup, and lights.
+    </div>
+  </div>
+
+</div>
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+    <span>Package Includes</span>
+  </div>
+</div>
+
+<div class="whatGetList">
+
+  <div class="whatItem">
+    <i class="fa-solid fa-spa"></i>
+    Flower Entrance Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-archway"></i>
+    Welcome Gate Setup
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-seedling"></i>
+    Traditional Toran & Leaves
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-palette"></i>
+    Rangoli Design Setup
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-house"></i>
+    Home Interior Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-truck-fast"></i>
+    Free Setup & Installation
+  </div>
+
+</div>
+
+   <button class="popupBook" id="templeBookBtn">Book Now</button>
+
+  </div>
+
+</div>
+
+
+
+<!-- 6th popup suprise -->
+
+
+<div id="suprisePopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Surprise Room Setup</span>
+  <small>Event Setup Service</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="services/Surprise Room Setup1.webp">
+    <img src="services/Surprise Room Setup2.webp">
+    <img src="services/Surprise Room Setup3.webp">
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1499
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="suprise/1.webp" onclick="openImage(this)">
+ <img src="suprise/2.webp" onclick="openImage(this)">
+ 
+ <img src="suprise/3.webp" onclick="openImage(this)">
+ 
+ <img src="suprise/4.webp" onclick="openImage(this)">
+ 
+ <img src="suprise/5.webp" onclick="openImage(this)">
+ 
+ <img src="suprise/6.webp" onclick="openImage(this)">
+ 
+ <img src="suprise/7.webp" onclick="openImage(this)">
+ 
+ <img src="suprise/8.webp" onclick="openImage(this)">
+ 
+ 
+ 
+
+</div>
+
+    <!-- DETAILS -->
+   <div class="detailTitle">Service Includes :</div>
+
+<ul class="serviceListText">
+  <li>LED Light Setup</li>
+  <li>Wall & Ceiling Lighting</li>
+  <li>Stage & Backdrop Lighting</li>
+  <li>Color Theme Lighting Effects</li>
+  <li>Outdoor & Indoor Setup</li>
+  <li>Quick Installation Service</li>
+    <li>Fast Setup & Support</li>
+
+</ul>
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="hwTypeWrap">
+
+  <div class="hwItem">Birthday Surprise Setup</div>
+  <div class="hwItem">Anniversary Decoration</div>
+  <div class="hwItem">Romantic Room Setup</div>
+  <div class="hwItem">Candle Light Arrangement</div>
+  <div class="hwItem">Balloon & Theme Decoration</div>
+  <div class="hwItem">Customized Name Setup</div>
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+    <span>Package Includes</span>
+  </div>
+</div>
+
+<div class="whatGetList">
+
+  <div class="whatItem">
+    <i class="fa-solid fa-spa"></i>
+    Flower Entrance Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-archway"></i>
+    Welcome Gate Setup
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-seedling"></i>
+    Traditional Toran & Leaves
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-palette"></i>
+    Rangoli Design Setup
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-house"></i>
+    Home Interior Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-truck-fast"></i>
+    Free Setup & Installation
+  </div>
+
+</div>
+
+    <button class="popupBook" id="supriseBookBtn">Book Now</button>
+
+  </div>
+
+</div>
+
+
+<div id="imgViewer" class="imgViewer">
+
+  <i class="fa-solid fa-xmark imgClose" onclick="closeImage()"></i>
+
+  <div class="imgSliderViewer" id="viewerSlider"></div>
+
+</div>
+<div id="appLoader" class="appLoader">
+  <div class="flowerLoader">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+
+<div class="footerBlock">
+
+  <!-- LEFT -->
+  <div class="footerLeft">
+    <i class="fa-solid fa-bag-shopping footerIcon"></i>
+    <div class="footerName">CEZZO</div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="footerRight">
+
+    <div class="footerRow">
+      <i class="fa-regular fa-clock"></i>
+      <span>Everything in Minutes</span>
+    </div>
+
+    <div class="footerRow">
+      <i class="fa-solid fa-heart"></i>
+      <span>Made with ❤️ in India</span>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+<!-- mariage popup-->
+
+
+
+<div id="marriagePopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Marriage</span>
+  <small>Event Setup Service</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="services/marriage event.webp">
+    <img src="mariage /1.webp">
+    <img src="mariage /0.webp">
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1499
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="mariage /3.webp" onclick="openImage(this)">
+ 
+  <img src="mariage /4.webp" onclick="openImage(this)">
+ 
+  <img src="mariage /5.webp" onclick="openImage(this)">
+ 
+  <img src="mariage /6.webp" onclick="openImage(this)">
+ 
+  <img src="mariage /7.webp" onclick="openImage(this)">
+ 
+  <img src="mariage /8.webp" onclick="openImage(this)">
+ 
+  <img src="mariage /9.webp" onclick="openImage(this)">
+ 
+  <img src="mariage /10.webp" onclick="openImage(this)">
+ 
+  <img src="mariage /11.webp" onclick="openImage(this)">
+ 
+ 
+ 
+ 
+
+</div>
+
+    <!-- DETAILS -->
+   <div class="detailTitle">Service Includes :</div>
+
+<ul class="serviceListText">
+  <li>Elegant LED Lighting for Wedding Venues</li>
+  <li>Decorative Wall & Ceiling Illumination</li>
+  <li>Stage, Mandap & Backdrop Lighting Setup</li>
+  <li>Customized Color Theme Lighting Effects</li>
+  <li>Indoor & Outdoor Wedding Lighting Arrangements</li>
+  <li>Quick & Hassle-Free Installation</li>
+  <li>On-site Support for Smooth Event Execution</li>
+</ul>
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="hwTypeWrap">
+
+  <div class="hwItem">Wedding Stage Decoration</div>
+  <div class="hwItem">Mandap Decoration</div>
+  <div class="hwItem">Reception Backdrop Setup</div>
+  <div class="hwItem">Entrance & Welcome Decoration</div>
+  <div class="hwItem">Floral & Theme Wedding Decoration</div>
+  <div class="hwItem">Customized Couple Name Setup</div>
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+    <span>Package Includes</span>
+  </div>
+</div>
+
+<div class="whatGetList">
+
+  
+<div class="whatItem">
+    <i class="fa-solid fa-spa"></i>
+    Floral Wedding Entrance Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-archway"></i>
+    Grand Welcome Gate Setup
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-seedling"></i>
+    Traditional Toran & Mango Leaves Decor
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-palette"></i>
+    Customized Rangoli & Kolam Designs
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-house"></i>
+    Wedding Home & Venue Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-truck-fast"></i>
+    Free Delivery, Setup & On-site Support
+  </div>
+
+
+  <div class="whatItem">
+    <i class="fa-solid fa-truck-fast"></i>
+    Free Setup & Installation
+  </div>
+
+</div>
+
+   <button class="popupBook" id="marriageBookBtn">Book Now</button>
+
+  </div>
+
+</div>
+
+
+
+
+
+<div id="receptionPopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Marriage</span>
+  <small>Event Setup Service</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="recptions/-1.webp">
+    <img src="recptions/-2.webp">
+    <img src="recptions/0.webp">
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1499
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="recptions/1.webp" onclick="openImage(this)">
+  <img src="recptions/2.webp" onclick="openImage(this)">
+ 
+   <img src="recptions/3.webp" onclick="openImage(this)">
+ 
+   <img src="recptions/4.webp" onclick="openImage(this)">
+ 
+   <img src="recptions/5.webp" onclick="openImage(this)">
+ 
+   <img src="recptions/6.webp" onclick="openImage(this)">
+
+   <img src="recptions/7.webp" onclick="openImage(this)">
+ 
+   <img src="recptions/8.webp" onclick="openImage(this)">
+ 
+   <img src="recptions/9.webp" onclick="openImage(this)">
+ 
+   <img src="recptions/10.webp" onclick="openImage(this)">
+ 
+  
+  
+ 
+
+</div>
+
+    <!-- DETAILS -->
+   <div class="detailTitle">Service Includes :</div>
+
+<ul class="serviceListText">
+  <li>Elegant LED Lighting for Reception Venues</li>
+  <li>Decorative Wall & Ceiling Ambient Lighting</li>
+  <li>Reception Stage & Backdrop Lighting Setup</li>
+  <li>Customized Color Theme & Mood Lighting Effects</li>
+  <li>Dance Floor & Spotlight Lighting Arrangements</li>
+  <li>Indoor & Outdoor Reception Lighting Setup</li>
+  <li>Quick Installation with On-site Technical Support</li>
+</ul>
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="hwTypeWrap">
+
+  <div class="hwItem">Reception Stage Decoration</div>
+  <div class="hwItem">Couple Seating & Backdrop Setup</div>
+  <div class="hwItem">Grand Entrance & Welcome Area Decoration</div>
+  <div class="hwItem">Floral & Theme Reception Decoration</div>
+  <div class="hwItem">LED Name Initials & Monogram Setup</div>
+  <div class="hwItem">Cake Table & Photo Booth Decoration</div>
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+    <span>Package Includes</span>
+  </div>
+</div>
+
+<div class="whatGetList">
+
+  <div class="whatItem">
+    <i class="fa-solid fa-spa"></i>
+    Floral Reception Entrance Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-archway"></i>
+    Grand Welcome Gate & Entry Setup
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-seedling"></i>
+    Elegant Greenery & Theme Decor
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-palette"></i>
+    Customized Floor Art & Design Elements
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-house"></i>
+    Reception Venue Interior Decoration
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-camera"></i>
+    Photo Booth & Selfie Point Setup
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-truck-fast"></i>
+    Free Delivery, Setup & On-site Support
+  </div>
+
+</div>
+  
+   <button class="popupBook" id="receptionBookBtn">Book Now</button>
+
+  </div>
+
+</div>
+
+
+
+
+<!-- female makeup -->
+
+
+<div id="femalemakeupPopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Female Makeup</span>
+  <small>Beautician Booking</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="femalemp/-1.webp">
+    <img src="femalemp/0.webp">
+    <img src="femalemp/6.webp">
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1000
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="femalemp/1.webp" onclick="openImage(this)">
+   <img src="femalemp/2.webp" onclick="openImage(this)">
+  
+   <img src="femalemp/3.webp" onclick="openImage(this)">
+  
+   <img src="femalemp/4.webp" onclick="openImage(this)">
+  
+   <img src="femalemp/5.webp" onclick="openImage(this)">
+  
+   <img src="femalemp/6.webp" onclick="openImage(this)">
+  
+   
+   <img src="femalemp/8.webp" onclick="openImage(this)">
+  
+   <img src="femalemp/9.webp" onclick="openImage(this)">
+  
+   <img src="femalemp/11.webp" onclick="openImage(this)">
+  
+  
+  
+  
+ 
+
+</div>
+
+    <!-- DETAILS -->
+  <div class="detailTitle">Service Includes :</div>
+
+<ul class="serviceListText">
+  <li>Professional Bridal & Party Makeup Services</li>
+  <li>Skincare Preparation & Consultation</li>
+  <li>Hair Styling & Hairdo Setup</li>
+  <li>Customized Makeup Based on Skin Tone & Event Theme</li>
+  <li>HD & Airbrush Makeup Options Available</li>
+  <li>Home Service & On-location Booking</li>
+  <li>On-time Service with Professional Support</li>
+</ul>
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="hwTypeWrap">
+
+  <div class="hwItem">Bridal Makeup Services</div>
+  <div class="hwItem">Party & Engagement Makeup</div>
+  <div class="hwItem">Hair Styling & Hairdo Services</div>
+  <div class="hwItem">HD & Airbrush Makeup</div>
+  <div class="hwItem">Mehendi & Pre-Wedding Grooming</div>
+  <div class="hwItem">Home Service Beautician Booking</div>
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+    <span>Package Includes</span>
+  </div>
+</div>
+
+<div class="whatGetList">
+
+  <div class="whatItem">
+    <i class="fa-solid fa-spa"></i>
+    Premium Bridal & Party Makeup Services
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-user"></i>
+    Personalized Skin & Beauty Consultation
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-scissors"></i>
+    Professional Hair Styling & Hairdos
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-palette"></i>
+    Customized Makeup Based on Occasion
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-spray-can-sparkles"></i>
+    HD & Airbrush Makeup Options
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-home"></i>
+    Doorstep / Home Service Available
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-clock"></i>
+    On-time Service with Professional Support
+  </div>
+
+</div>
+
+<button class="popupBook" id="femaleBookBtn">Book Now</button>
+  </div>
+
+</div>
+
+
+<!-- male popuop -->
+
+
+<div id="menmakeupPopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Make Makeup</span>
+  <small>Beautician Booking</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="malemp/-1.webp">
+    <img src="malemp/-2.webp">
+    <img src="malemp/0.webp">
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1000
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="malemp/1.webp" onclick="openImage(this)">
+ <img src="malemp/2.webp" onclick="openImage(this)">
+ <img src="malemp/3.webp" onclick="openImage(this)">
+ <img src="malemp/4.webp" onclick="openImage(this)">
+ <img src="malemp/5.webp" onclick="openImage(this)">
+ <img src="malemp/6.webp" onclick="openImage(this)">
+ <img src="malemp/7.webp" onclick="openImage(this)">
+ <img src="malemp/8.webp" onclick="openImage(this)">
+ <img src="malemp/9.webp" onclick="openImage(this)">
+ <img src="malemp/10.webp" onclick="openImage(this)">
+ 
+  
+ 
+
+</div>
+
+    <!-- DETAILS -->
+  <div class="detailTitle">Service Includes :</div>
+
+<ul class="serviceListText">
+  <li>Professional Bridal & Party Makeup Services</li>
+  <li>Skincare Preparation & Consultation</li>
+  <li>Hair Styling & Hairdo Setup</li>
+  <li>Customized Makeup Based on Skin Tone & Event Theme</li>
+  <li>HD & Airbrush Makeup Options Available</li>
+  <li>Home Service & On-location Booking</li>
+  <li>On-time Service with Professional Support</li>
+</ul>
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="hwTypeWrap">
+
+  <div class="hwItem">Bridal Makeup Services</div>
+  <div class="hwItem">Party & Engagement Makeup</div>
+  <div class="hwItem">Hair Styling & Hairdo Services</div>
+  <div class="hwItem">HD & Airbrush Makeup</div>
+  
+  <div class="hwItem">Home Service Beautician Booking</div>
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+    <span>Package Includes</span>
+  </div>
+</div>
+
+<div class="whatGetList">
+
+  <div class="whatItem">
+    <i class="fa-solid fa-spa"></i>
+    Premium Bridal & Party Makeup Services
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-user"></i>
+    Personalized Skin & Beauty Consultation
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-scissors"></i>
+    Professional Hair Styling & Hairdos
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-palette"></i>
+    Customized Makeup Based on Occasion
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-spray-can-sparkles"></i>
+    HD & Airbrush Makeup Options
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-home"></i>
+    Doorstep / Home Service Available
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-clock"></i>
+    On-time Service with Professional Support
+  </div>
+
+</div>
+
+<button class="popupBook" id="maleBookBtn">Book Now</button>
+  </div>
+
+</div>
+
+
+<!-- veg popup -->
+
+<div id="vegPopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Veg Catering</span>
+  <small>Food Booking</small>
+</div>
+  </div>
+
+ 
+ <div class="riceWrap">
+
+  <!-- Card 1 -->
+  <div class="riceItem" data-price="12" data-type="veg">
+    <img src="veg catering/1.webp" class="riceThumb" alt="Plain Rice">
+    <div class="riceInfo">
+      <h3 class="riceName">Plain Rice</h3>
+      <p class="riceText">Freshly cooked steamed rice, soft and perfect to pair with curries and dals.</p>
+      <div class="riceRow">
+        <button class="riceAdd">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="riceItem" data-price="13" data-type="veg">
+    <img src="veg catering/2.webp" class="riceThumb" alt="Veg Biryani">
+    <div class="riceInfo">
+      <h3 class="riceName">Veg Biryani</h3>
+      <p class="riceText">Aromatic basmati rice cooked with fresh vegetables, spices, and rich flavors.</p>
+      <div class="riceRow">
+        <button class="riceAdd">Add</button>
+      </div>
+    </div>
+  </div>
+
+  
+<!-- Card 3 -->
+<div class="riceItem" data-price="11" data-type="veg">
+  <img src="veg catering/3.webp" class="riceThumb" alt="Veg Pulao">
+  <div class="riceInfo">
+    <h3 class="riceName">Veg Pulao</h3>
+    <p class="riceText">Fragrant basmati rice cooked with mixed vegetables and mild spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 4 -->
+<div class="riceItem" data-price="12"data-type="veg">
+  <img src="veg catering/4.webp" class="riceThumb" alt="Lemon Rice">
+  <div class="riceInfo">
+    <h3 class="riceName">Lemon Rice</h3>
+    <p class="riceText">Tangy and flavorful rice with lemon juice, peanuts, and curry leaves.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 5 -->
+<div class="riceItem" data-price="13" data-type="veg">
+  <img src="veg catering/5.webp" class="riceThumb" alt="Green Biryani">
+  <div class="riceInfo">
+    <h3 class="riceName">Green Biryani</h3>
+    <p class="riceText">Herb-infused biryani made with fresh mint, coriander, and aromatic spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 6 -->
+<div class="riceItem" data-price="10" data-type="veg">
+  <img src="veg catering/6.webp" class="riceThumb" alt="Coconut Rice">
+  <div class="riceInfo">
+    <h3 class="riceName">Coconut Rice</h3>
+    <p class="riceText">South Indian style rice mixed with fresh coconut and mild seasoning.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 7 -->
+<div class="riceItem"data-price="13" data-type="veg">
+  <img src="veg catering/7.webp" class="riceThumb" alt="Paneer Curry">
+  <div class="riceInfo">
+    <h3 class="riceName">Paneer Curry</h3>
+    <p class="riceText">Soft paneer cubes cooked in rich and creamy spiced gravy.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 8 -->
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="veg catering/8.webp" class="riceThumb" alt="Dal with Mango">
+  <div class="riceInfo">
+    <h3 class="riceName">Dal + Mango</h3>
+    <p class="riceText">Traditional dal cooked with raw mango for a tangy and homely taste.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 9 -->
+<div class="riceItem"data-price="11" data-type="veg">
+  <img src="veg catering/9.webp" class="riceThumb" alt="Punugulu">
+  <div class="riceInfo">
+    <h3 class="riceName">Pun Makhana</h3>
+    <p class="riceText">Crispy deep-fried snack made from dosa batter, perfect for starters.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 10 -->
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="veg catering/10.webp" class="riceThumb" alt="Meal Maker Curry">
+  <div class="riceInfo">
+    <h3 class="riceName">Meal Maker Curry</h3>
+    <p class="riceText">Protein-rich soya chunks cooked in spicy and flavorful gravy.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 11 -->
+<div class="riceItem" data-price="10" data-type="veg">
+  <img src="veg catering/11.webp" class="riceThumb" alt="Potato Curry">
+  <div class="riceInfo">
+    <h3 class="riceName">Potato Curry</h3>
+    <p class="riceText">Simple and tasty potato curry with traditional spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 12 -->
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="veg catering/12.webp" class="riceThumb" alt="Tomato Cashew Curry">
+  <div class="riceInfo">
+    <h3 class="riceName">Tomato Cashew Curry</h3>
+    <p class="riceText">Rich tomato-based curry blended with crunchy cashews for extra flavor.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 13 -->
+<div class="riceItem" data-price="11" data-type="veg">
+  <img src="veg catering/13.webp" class="riceThumb" alt="Dondakaya Fry">
+  <div class="riceInfo">
+    <h3 class="riceName">Dondakaya Fry</h3>
+    <p class="riceText">Crispy ivy gourd fry with spices, a perfect side dish for meals.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 14 -->
+<div class="riceItem"data-price="13" data-type="veg">
+  <img src="veg catering/14.webp" class="riceThumb" alt="Potato Fry">
+  <div class="riceInfo">
+    <h3 class="riceName">Potato Fry</h3>
+    <p class="riceText">Crispy fried potatoes tossed with spices for a perfect side dish.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 15 -->
+<div class="riceItem" data-price="10" data-type="veg">
+  <img src="veg catering/15.webp" class="riceThumb" alt="Cabbage Fry">
+  <div class="riceInfo">
+    <h3 class="riceName">Cabbage Fry</h3>
+    <p class="riceText">Lightly sautéed cabbage with spices, simple and flavorful.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 16 -->
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="veg catering/16.webp" class="riceThumb" alt="Brinjal Curry">
+  <div class="riceInfo">
+    <h3 class="riceName">Brinjal Curry</h3>
+    <p class="riceText">Delicious eggplant curry cooked in traditional masala gravy.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 17 -->
+<div class="riceItem" data-price="11" data-type="veg">
+  <img src="veg catering/17.webp" class="riceThumb" alt="Ladies Finger Curry">
+  <div class="riceInfo">
+    <h3 class="riceName">Ladies Finger Curry</h3>
+    <p class="riceText">Soft okra cooked in a mildly spiced and flavorful curry base.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 18 -->
+<div class="riceItem" data-price="13" data-type="veg">
+  <img src="veg catering/18.webp" class="riceThumb" alt="Ladies Finger Fry">
+  <div class="riceInfo">
+    <h3 class="riceName">Ladies Finger Fry</h3>
+    <p class="riceText">Crispy fried okra with spices, a crunchy and tasty side.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 19 -->
+<div class="riceItem" data-price="10" data-type="veg">
+  <img src="veg catering/19.webp" class="riceThumb" alt="Tomato Dal">
+  <div class="riceInfo">
+    <h3 class="riceName">Tomato Dal</h3>
+    <p class="riceText">Tangy and comforting dal cooked with fresh tomatoes and spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 20 -->
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="veg catering/20.webp" class="riceThumb" alt="Raw Mango Cashew Curry">
+  <div class="riceInfo">
+    <h3 class="riceName">Raw Mango Cashew Curry</h3>
+    <p class="riceText">Tangy raw mango cooked with rich cashews for a unique flavorful curry.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 21 -->
+<div class="riceItem" data-price="11" data-type="veg">
+  <img src="veg catering/21.webp" class="riceThumb" alt="Pumpkin Pulusu">
+  <div class="riceInfo">
+    <h3 class="riceName">Pumpkin Pulusu</h3>
+    <p class="riceText">Sweet and tangy pumpkin stew made in traditional Andhra style.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 22 -->
+<div class="riceItem" data-price="13" data-type="veg">
+  <img src="veg catering/22.webp" class="riceThumb" alt="Sambar">
+  <div class="riceInfo">
+    <h3 class="riceName">Sambar</h3>
+    <p class="riceText">Classic South Indian lentil curry with vegetables and aromatic spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 23 -->
+<div class="riceItem" data-price="10" data-type="veg">
+  <img src="veg catering/23.webp" class="riceThumb" alt="Rasam">
+  <div class="riceInfo">
+    <h3 class="riceName">Rasam</h3>
+    <p class="riceText">Spicy and tangy soup made with tamarind, pepper, and herbs.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 24 -->
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="veg catering/24.webp" class="riceThumb" alt="Appadam">
+  <div class="riceInfo">
+    <h3 class="riceName">Appadam</h3>
+    <p class="riceText">Crispy papad served as a crunchy side with meals.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 25 -->
+<div class="riceItem"data-price="8" data-type="veg">
+  <img src="veg catering/25.webp" class="riceThumb" alt="Mango Pickle">
+  <div class="riceInfo">
+    <h3 class="riceName">Mango Pickle</h3>
+    <p class="riceText">Spicy and tangy traditional mango pickle, perfect with rice meals.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 26 -->
+<div class="riceItem" data-price="5" data-type="veg">
+  <img src="veg catering/26.webp" class="riceThumb" alt="Dosakaya Pickle">
+  <div class="riceInfo">
+    <h3 class="riceName">Dosakaya Pickle</h3>
+    <p class="riceText">Andhra-style yellow cucumber pickle with a rich, tangy flavor.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 35 -->
+<div class="riceItem"data-price="8" data-type="veg">
+  <img src="veg catering/35.webp" class="riceThumb" alt="Curd">
+  <div class="riceInfo">
+    <h3 class="riceName">Curd</h3>
+    <p class="riceText">Fresh and creamy curd, a perfect cooling addition to your meal.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="riceSideHead">Sweets</div>
+
+
+<!-- Card 27 -->
+<div class="riceItem" data-price="11" data-type="veg">
+  <img src="veg catering/27.webp" class="riceThumb" alt="Bread Halwa">
+  <div class="riceInfo">
+    <h3 class="riceName">Bread Halwa</h3>
+    <p class="riceText">Rich and soft halwa made with bread, ghee, and dry fruits.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 28 -->
+<div class="riceItem" data-price="11" data-type="veg">
+  <img src="veg catering/28.webp" class="riceThumb" alt="Gulab Jamun">
+  <div class="riceInfo">
+    <h3 class="riceName">Gulab Jamun</h3>
+    <p class="riceText">Soft milk-based dumplings soaked in sweet sugar syrup.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 29 -->
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="veg catering/29.webp" class="riceThumb" alt="Carrot Halwa">
+  <div class="riceInfo">
+    <h3 class="riceName">Carrot Halwa</h3>
+    <p class="riceText">Delicious dessert made with fresh carrots, milk, and ghee.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 30 -->
+<div class="riceItem"data-price="12" data-type="veg">
+  <img src="veg catering/30.webp" class="riceThumb" alt="Papaya Halwa">
+  <div class="riceInfo">
+    <h3 class="riceName">Papaya Halwa</h3>
+    <p class="riceText">Smooth and unique halwa made from ripe papaya and sugar.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 31 -->
+<div class="riceItem"data-price="13" data-type="veg">
+  <img src="veg catering/31.webp" class="riceThumb" alt="Bobbatlu">
+  <div class="riceInfo">
+    <h3 class="riceName">Bobbatlu</h3>
+    <p class="riceText">Traditional sweet flatbread stuffed with jaggery and dal filling.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="riceSideHead">Starters</div>
+
+<!-- Card 32 -->
+<div class="riceItem" data-price="10" data-type="veg">
+  <img src="veg catering/32.webp" class="riceThumb" alt="Boorelu">
+  <div class="riceInfo">
+    <h3 class="riceName">Boorelu</h3>
+    <p class="riceText">Crispy sweet dumplings filled with jaggery and dal mixture.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 33 -->
+<div class="riceItem"data-price="11" data-type="veg">
+  <img src="veg catering/33.webp" class="riceThumb" alt="Mirchi Bajji">
+  <div class="riceInfo">
+    <h3 class="riceName">Mirchi Bajji</h3>
+    <p class="riceText">Spicy green chilies dipped in batter and deep fried to perfection.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card 34 -->
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="veg catering/34.webp" class="riceThumb" alt="Medu Vada">
+  <div class="riceInfo">
+    <h3 class="riceName">Medu Vada</h3>
+    <p class="riceText">Crispy outside, soft inside lentil fritters, a classic South Indian snack.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceSideHead">Non Veg</div>
+<div class="riceItem" data-price="40" data-type="veg">
+  <img src="nonveg catering/1.webp" class="riceThumb" alt="Chicken 65">
+  <div class="riceInfo">
+    <h3 class="riceName">Chicken 65</h3>
+    <p class="riceText">Spicy deep-fried chicken tossed in traditional South Indian masala.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="35" data-type="veg">
+  <img src="nonveg catering/2.webp" class="riceThumb" alt="Chicken Leg Piece">
+  <div class="riceInfo">
+    <h3 class="riceName">Chicken Leg Piece</h3>
+    <p class="riceText">Juicy fried chicken leg piece marinated with flavorful spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="nonveg catering/3.webp" class="riceThumb" alt="Egg Bajji">
+  <div class="riceInfo">
+    <h3 class="riceName">Egg Bajji</h3>
+    <p class="riceText">Boiled egg coated in spicy batter and deep fried crispy.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="30" data-type="veg">
+  <img src="nonveg catering/4.webp" class="riceThumb" alt="Chicken Lollipop">
+  <div class="riceInfo">
+    <h3 class="riceName">Chicken Lollipop</h3>
+    <p class="riceText">Crispy chicken wings tossed in spicy and tangy sauce.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="40" data-type="veg">
+  <img src="nonveg catering/5.webp" class="riceThumb" alt="Chicken Dum Biryani">
+  <div class="riceInfo">
+    <h3 class="riceName">Chicken Dum Biryani</h3>
+    <p class="riceText">Aromatic basmati rice cooked with tender chicken and spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="40" data-type="veg">
+  <img src="nonveg catering/6.webp" class="riceThumb" alt="Chicken Fry Piece Biryani">
+  <div class="riceInfo">
+    <h3 class="riceName">Chicken Fry Piece Biryani</h3>
+    <p class="riceText">Biryani served with crispy fried chicken pieces.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="30" data-type="veg">
+  <img src="nonveg catering/7.webp" class="riceThumb" alt="Chicken Pulao">
+  <div class="riceInfo">
+    <h3 class="riceName">Chicken Pulao</h3>
+    <p class="riceText">Lightly spiced rice cooked with chicken and herbs.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="nonveg catering/8.webp" class="riceThumb" alt="Plain Rice">
+  <div class="riceInfo">
+    <h3 class="riceName">Plain Rice</h3>
+    <p class="riceText">Steamed white rice served fresh and hot.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="45" data-type="veg">
+  <img src="nonveg catering/9.webp" class="riceThumb" alt="Prawn Biryani">
+  <div class="riceInfo">
+    <h3 class="riceName">Prawn Biryani</h3>
+    <p class="riceText">Flavorful biryani made with fresh prawns and spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="20" data-type="veg">
+  <img src="nonveg catering/10.webp" class="riceThumb" alt="Chicken Curry">
+  <div class="riceInfo">
+    <h3 class="riceName">Chicken Curry</h3>
+    <p class="riceText">Rich and spicy chicken curry cooked in traditional style.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="30" data-type="veg">
+  <img src="nonveg catering/11.webp" class="riceThumb" alt="Mutton Curry">
+  <div class="riceInfo">
+    <h3 class="riceName">Mutton Curry</h3>
+    <p class="riceText">Tender mutton cooked in thick spicy gravy.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="riceItem" data-price="30" data-type="veg">
+  <img src="nonveg catering/12.webp" class="riceThumb" alt="Fish Curry">
+  <div class="riceInfo">
+    <h3 class="riceName">Fish Curry</h3>
+    <p class="riceText">Spicy and tangy fish curry cooked in traditional Andhra style.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="32" data-type="veg">
+  <img src="nonveg catering/13.webp" class="riceThumb" alt="Gongura Chicken">
+  <div class="riceInfo">
+    <h3 class="riceName">Gongura Chicken</h3>
+    <p class="riceText">Chicken cooked with tangy gongura leaves and spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="12" data-type="veg">
+  <img src="nonveg catering/14.webp" class="riceThumb" alt="Sambar">
+  <div class="riceInfo">
+    <h3 class="riceName">Sambar</h3>
+    <p class="riceText">Traditional lentil soup with vegetables and aromatic spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="10" data-type="veg">
+  <img src="nonveg catering/15.webp" class="riceThumb" alt="Rasam">
+  <div class="riceInfo">
+    <h3 class="riceName">Rasam</h3>
+    <p class="riceText">Hot and tangy South Indian soup with pepper and tamarind.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="8" data-type="veg">
+  <img src="nonveg catering/16.webp" class="riceThumb" alt="Appadam">
+  <div class="riceInfo">
+    <h3 class="riceName">Appadam</h3>
+    <p class="riceText">Crispy fried papad to complement your meal.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="9" data-type="veg">
+  <img src="nonveg catering/17.webp" class="riceThumb" alt="Curd">
+  <div class="riceInfo">
+    <h3 class="riceName">Curd</h3>
+    <p class="riceText">Fresh and creamy curd to complete your meal.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="30" data-type="veg">
+  <img src="nonveg catering/18.webp" class="riceThumb" alt="Chicken Pickle">
+  <div class="riceInfo">
+    <h3 class="riceName">Chicken Pickle</h3>
+    <p class="riceText">Spicy homemade chicken pickle with rich flavors.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="34" data-type="veg">
+  <img src="nonveg catering/19.webp" class="riceThumb" alt="Prawn Pickle">
+  <div class="riceInfo">
+    <h3 class="riceName">Prawn Pickle</h3>
+    <p class="riceText">Tangy and spicy prawn pickle packed with flavor.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+<div class="riceItem" data-price="31" data-type="veg">
+  <img src="nonveg catering/20.webp" class="riceThumb" alt="Fish Special">
+  <div class="riceInfo">
+    <h3 class="riceName">Fish Special</h3>
+    <p class="riceText">Fresh fish cooked or fried with rich coastal spices.</p>
+    <div class="riceRow">
+      <button class="riceAdd">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="ricePlateBox">
+
+  <div class="ricePlateTitle">Catering Boys Required?</div>
+
+  <div class="riceToggleRow">
+    <button class="riceToggleBtn active" id="boysYes">Yes</button>
+    <button class="riceToggleBtn" id="boysNo">No</button>
+  </div>
+
+</div>
+<div class="ricePlateBox">
+
+  <h3 class="ricePlateTitle">Number of Plates</h3>
+
+  <input 
+  type="number" 
+  id="plateCount" 
+  class="ricePlateInput" 
+  placeholder="Minimum 20 plates"
+  min="20"
+>
+
+</div>
+<div class="riceBillBox">
+
+  <div class="riceBillTitle">TOTAL BILL</div>
+
+  <div class="riceBillRow">
+    <span>Total Items</span>
+    <span id="totalItems">0</span>
+  </div>
+
+  <div class="riceBillRow">
+    <span>Total Plates</span>
+    <span id="totalPlates">0</span>
+  </div>
+
+  <div class="riceBillRow">
+  <span>Additional Charges</span>
+  <span id="extraChargeText">₹100</span>
+</div>
+
+  <div class="riceBillTotal">
+    <span>Total Amount</span>
+    <span id="totalAmount">₹0</span>
+  </div>
+
+</div>
+<button class="riceBookNow">Book Now</button>
+
+</div>
+</div>
+</div>
+
+
+<!-- photo shoot-->
+<div id="photoPopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Photo Shoot</span>
+  <small>All Type of Photo Shhot</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="photoshoot/1.webp">
+    <img src="photoshoot/3.webp">
+    <img src="photoshoot/2.webp">
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1000
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="photoshoot/2.webp" onclick="openImage(this)">
+   <img src="photoshoot/3.webp" onclick="openImage(this)">
+   <img src="photoshoot/4.webp" onclick="openImage(this)">
+   <img src="photoshoot/5.webp" onclick="openImage(this)">
+   <img src="photoshoot/6.webp" onclick="openImage(this)">
+   <img src="photoshoot/7.webp" onclick="openImage(this)">
+  
+  
+  
+  
+  
+ 
+
+</div>
+
+<!-- CAMERA & SHOOT TYPES -->
+<div class="cameraSection">
+
+  <div class="cameraTitle">
+    <span>Camera & Shoot Types</span>
+  </div>
+
+  <div class="cameraWrap">
+
+    <div class="cameraItem">
+      <i class="fa-solid fa-mobile-screen"></i>
+      <p>iPhone Cinematic Photoshoot & Reel Coverage</p>
+    </div>
+
+    <div class="cameraItem">
+      <i class="fa-solid fa-camera-retro"></i>
+      <p>Professional DSLR Camera Photography</p>
+    </div>
+
+    <div class="cameraItem">
+      <i class="fa-solid fa-helicopter"></i>
+      <p>Drone Aerial Photography & Video Coverage</p>
+    </div>
+
+  </div>
+
+</div>
+    <!-- DETAILS -->
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="hwTypeWrap">
+
+  <div class="hwItem">Wedding Photoshoot</div>
+  <div class="hwItem">Pre-Wedding Photoshoot</div>
+  <div class="hwItem">Couple Photoshoot</div>
+  <div class="hwItem">Engagement Photography</div>
+  <div class="hwItem">Fashion & Portfolio Shoot</div>
+  <div class="hwItem">Birthday & Event Photoshoot</div>
+  <div class="hwItem">Outdoor & Indoor Photography</div>
+  <div class="hwItem">Cinematic Video Shoot</div>
+
+</div>
+<!-- PHOTOSHOOT INFO SECTION -->
+<div class="shootInfoSection">
+
+  <div class="shootInfoCard weddingTheme">
+    <h3>Wedding & Couple Photoshoots</h3>
+
+    <p>
+      Capture every beautiful emotion with professional wedding,
+      pre-wedding and couple photography sessions designed to
+      create timeless memories with cinematic quality.
+    </p>
+  </div>
+
+  <div class="shootInfoCard casualTheme">
+    <h3>Birthday & Casual Photoshoots</h3>
+
+    <p>
+      Celebrate special moments with creative birthday,
+      casual and personal photoshoots perfect for social media,
+      memories and event celebrations.
+    </p>
+  </div>
+
+  <div class="shootInfoCard fashionTheme">
+    <h3>Fashion & Portfolio Shoots</h3>
+
+    <p>
+      Professional portfolio and fashion photography sessions
+      crafted for models, influencers, creators and personal
+      branding with stylish cinematic editing.
+    </p>
+  </div>
+
+  <div class="shootInfoCard eventTheme">
+    <h3>Event & Party Photography</h3>
+
+    <p>
+      Cover birthdays, engagements, receptions, corporate events
+      and celebrations with high-quality photography and cinematic
+      video coverage for unforgettable memories.
+    </p>
+  </div>
+
+  <div class="shootInfoCard droneTheme">
+    <h3>Drone & Cinematic Coverage</h3>
+
+    <p>
+      Experience premium aerial drone photography and cinematic
+      reel shoots that add a creative and professional touch
+      to weddings, events and outdoor sessions.
+    </p>
+  </div>
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+  <span>Package Includes</span>
+</div>
+</div>
+
+<div class="whatGetList">
+
+  <div class="whatItem">
+    <i class="fa-solid fa-camera"></i>
+    Professional Wedding & Event Photoshoots
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-image"></i>
+    Pre-Wedding & Couple Photography Sessions
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-video"></i>
+    Cinematic Video & Reel Shoot Coverage
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-location-dot"></i>
+    Indoor & Outdoor Shoot Locations
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-user-group"></i>
+    Family, Friends & Group Photography
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-wand-magic-sparkles"></i>
+    Professional Editing & Color Enhancement
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-clock"></i>
+    On-time Service with Professional Support
+  </div>
+
+</div>
+<button class="popupBook" id="photoBookBtn">Book Now</button>
+  </div>
+
+</div>
+
+
+<div id="videoPopup" class="popupPage">
+
+  <!-- HEADER -->
+  <div class="popupHeader">
+    <i class="fa-solid fa-arrow-left closeBtn" onclick="closePopup(this)"></i>
+    <div class="popupTitle">
+  <span>Video Shoot</span>
+  <small>All Type of Video Shhot</small>
+</div>
+  </div>
+
+  <!-- IMAGE SCROLL -->
+  <div class="popupSlider" id="slider1">
+    <img src="videoshoot/1.webp">
+    <img src="videoshoot/2.webp">
+    <img src="videoshoot/3.webp">
+  </div>
+
+  <!-- DOTS -->
+  <div class="dots" id="dots1"></div>
+
+  <!-- CONTENT -->
+  <div class="popupContent">
+
+    <div class="popupPrice">
+  <span>Starting from</span>
+  ₹1000
+</div>
+
+<div class="trustRow">
+
+  <div class="trustItem">
+  <i class="fa-solid fa-shield-halved"></i>
+  <span>100% Secured</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>Verified Services</span>
+</div>
+
+<div class="trustItem">
+  <i class="fa-solid fa-thumbs-up"></i>
+  <span>Trusted Quality</span>
+</div>
+
+</div>
+    <!-- SAMPLE -->
+    <div class="sampleTitle">Our Samples</div>
+
+    <div class="sampleScroll">
+  <img src="videoshoot/4.webp" onclick="openImage(this)">
+ <img src="videoshoot/3.webp" onclick="openImage(this)">
+
+   <img src="videoshoot/2.webp" onclick="openImage(this)">
+
+   <img src="videoshoot/1.webp" onclick="openImage(this)">
+
+   <img src="videoshoot/5.webp" onclick="openImage(this)">
+
+   <img src="videoshoot/6.webp" onclick="openImage(this)">
+
+   <img src="videoshoot/7.webp" onclick="openImage(this)">
+
+  
+  
+  
+  
+  
+  
+ 
+
+</div>
+
+<!-- CAMERA & SHOOT TYPES -->
+<div class="cameraSection">
+
+  <div class="cameraTitle">
+    <span>Shoot Types</span>
+  </div>
+
+  <div class="cameraWrap">
+
+    <div class="cameraItem">
+      <i class="fa-solid fa-mobile-screen"></i>
+      <p>iPhone Cinematic Photoshoot & Reel Coverage</p>
+    </div>
+
+    <div class="cameraItem">
+      <i class="fa-solid fa-camera-retro"></i>
+      <p>Professional DSLR Camera Photography</p>
+    </div>
+
+    <div class="cameraItem">
+      <i class="fa-solid fa-helicopter"></i>
+      <p>Drone Aerial Photography & Video Coverage</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- PHOTOSHOOT INFO SECTION -->
+<div class="shootInfoSection">
+
+  <div class="shootInfoCard weddingTheme">
+    <h3>Wedding & Couple Photoshoots</h3>
+
+    <p>
+      Capture every beautiful emotion with professional wedding,
+      pre-wedding and couple photography sessions designed to
+      create timeless memories with cinematic quality.
+    </p>
+  </div>
+
+  <div class="shootInfoCard casualTheme">
+    <h3>Birthday & Casual Photoshoots</h3>
+
+    <p>
+      Celebrate special moments with creative birthday,
+      casual and personal photoshoots perfect for social media,
+      memories and event celebrations.
+    </p>
+  </div>
+
+  <div class="shootInfoCard fashionTheme">
+    <h3>Fashion & Portfolio Shoots</h3>
+
+    <p>
+      Professional portfolio and fashion photography sessions
+      crafted for models, influencers, creators and personal
+      branding with stylish cinematic editing.
+    </p>
+  </div>
+
+  <div class="shootInfoCard eventTheme">
+    <h3>Event & Party Photography</h3>
+
+    <p>
+      Cover birthdays, engagements, receptions, corporate events
+      and celebrations with high-quality photography and cinematic
+      video coverage for unforgettable memories.
+    </p>
+  </div>
+
+  <div class="shootInfoCard droneTheme">
+    <h3>Drone & Cinematic Coverage</h3>
+
+    <p>
+      Experience premium aerial drone photography and cinematic
+      reel shoots that add a creative and professional touch
+      to weddings, events and outdoor sessions.
+    </p>
+  </div>
+
+</div>
+    <!-- DETAILS -->
+<div class="serviceTypeHeader">
+  <i class="fa-solid fa-tags"></i>
+  <span>Service Type</span>
+</div>
+
+<div class="hwTypeWrap">
+
+  <div class="hwItem">Wedding Photoshoot</div>
+  <div class="hwItem">Pre-Wedding Photoshoot</div>
+  <div class="hwItem">Couple Photoshoot</div>
+  <div class="hwItem">Engagement Photography</div>
+  <div class="hwItem">Fashion & Portfolio Shoot</div>
+  <div class="hwItem">Birthday & Event Photoshoot</div>
+  <div class="hwItem">Outdoor & Indoor Photography</div>
+  <div class="hwItem">Cinematic Video Shoot</div>
+
+</div>
+
+<div class="whatGetHeaderNew">
+  <div class="iconBox">
+    <i class="fa-solid fa-gift"></i>
+  </div>
+  <div class="textBox">
+  <span>Package Includes</span>
+</div>
+</div>
+
+<div class="whatGetList">
+
+  <div class="whatItem">
+    <i class="fa-solid fa-camera"></i>
+    Professional Wedding & Event Photoshoots
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-image"></i>
+    Pre-Wedding & Couple Photography Sessions
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-video"></i>
+    Cinematic Video & Reel Shoot Coverage
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-location-dot"></i>
+    Indoor & Outdoor Shoot Locations
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-user-group"></i>
+    Family, Friends & Group Photography
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-wand-magic-sparkles"></i>
+    Professional Editing & Color Enhancement
+  </div>
+
+  <div class="whatItem">
+    <i class="fa-solid fa-clock"></i>
+    On-time Service with Professional Support
+  </div>
+
+</div>
+<button class="popupBook" id="videoBookBtn">Book Now</button>
+  </div>
+
+</div>
+
+
+<!-- BOOKING POPUP -->
+<div id="bookingPopup" class="bookingPopup">
+
+  <!-- HEADER -->
+  <div class="bookingHeader">
+
+    <div class="bookingClose" onclick="closeBookingPopup()">
+      <i class="fa-solid fa-xmark"></i>
+    </div>
+
+    <h2>Book Service</h2>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="bookingContent">
+
+    <!-- SERVICE -->
+    <div class="bookingField">
+      <label>Service Type</label>
+      <input type="text" id="selectedService" placeholder="Selected Service" readonly>
+    </div>
+
+    <!-- NAME -->
+    <div class="bookingField">
+      <label>Your Name</label>
+      <input type="text" id="customerName" placeholder="Enter your name">
+    </div>
+
+    <!-- MOBILE -->
+    <div class="bookingField">
+      <label>Mobile Number</label>
+      <input type="tel" id="customerMobile" placeholder="Enter mobile number">
+    </div>
+<!-- DECORATION TYPE -->
+<div class="bookingField" id="decorationTypeField">
+  <label>Decoration Type</label>
+
+  <select id="decorationType">
+    <option value="">Select Decoration</option>
+  </select>
+</div>
+
+<!-- EVENT TYPE -->
+<div class="bookingField" id="eventTypeField">
+  <label>Event Type</label>
+
+  <select id="eventType">
+    <option value="">Select Event</option>
+  </select>
+</div>
+    <!-- LOCATION -->
+    <div class="bookingField">
+      <label>Address</label>
+
+      <button class="detectBtn" onclick="detectLocation()">
+        <i class="fa-solid fa-location-crosshairs"></i>
+        Detect Your Address
+      </button>
+
+      <textarea id="customerAddress"
+        placeholder="Your address will appear here"></textarea>
+    </div>
+
+    <!-- ORDER BUTTON -->
+    <button class="placeOrderBtn">
+      Order Now
+    </button>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+<script>
+const fullAddress = localStorage.getItem("savedAddress");
+
+if(fullAddress){
+  const parts = fullAddress.split(",");
+  document.getElementById("city").innerText = parts[1]?.trim() || "Your City";
+  document.getElementById("address").innerText = fullAddress;
+}
+
+document.querySelectorAll(".imgSlider").forEach(slider => {
+  let imgs = slider.querySelectorAll("img");
+  let index = 0;
+
+  setInterval(() => {
+    imgs[index].classList.remove("active");
+    index = (index + 1) % imgs.length;
+    imgs[index].classList.add("active");
+  }, 2500);
+});
+document.getElementById("homeBtn").addEventListener("click", function(){
+
+  // 🔥 skip intro next time
+  sessionStorage.setItem("skipIntro", "true");
+
+  // 🔥 redirect to home page
+  window.location.href = "index.html";
+
+});
+
+
+
+/* DOTS INIT (call once per popup) */
+function initSlider(sliderId, dotsId){
+  const slider = document.getElementById(sliderId);
+  const dots = document.getElementById(dotsId);
+
+  const images = slider.querySelectorAll("img");
+
+  dots.innerHTML = "";
+
+  images.forEach((_, i) => {
+    let dot = document.createElement("span");
+    if(i === 0) dot.classList.add("active");
+    dots.appendChild(dot);
+  });
+
+  slider.addEventListener("scroll", () => {
+    let index = Math.round(slider.scrollLeft / slider.clientWidth);
+    dots.querySelectorAll("span").forEach(d => d.classList.remove("active"));
+    dots.children[index]?.classList.add("active");
+  });
+}
+
+/* INIT */
+initSlider("slider1","dots1");
+
+
+let allImages = [];
+
+function openImage(el){
+
+  const viewer = document.getElementById("imgViewer");
+  const slider = document.getElementById("viewerSlider");
+
+  viewer.style.display = "flex";
+  document.body.style.overflow = "hidden";
+
+  // 🔥 get all images from same row
+  const parent = el.parentElement;
+  allImages = Array.from(parent.querySelectorAll("img"));
+
+  // clear old images
+  slider.innerHTML = "";
+
+  // add images to slider
+  allImages.forEach(img => {
+    let newImg = document.createElement("img");
+    newImg.src = img.src;
+    slider.appendChild(newImg);
+  });
+
+  // 🔥 scroll to clicked image
+  const index = allImages.indexOf(el);
+
+  // wait for render (important fix)
+  setTimeout(() => {
+    slider.scrollLeft = index * slider.clientWidth;
+  }, 50);
+}
+
+/* CLOSE */
+function closeImage(){
+  document.getElementById("imgViewer").style.display = "none";
+  document.body.style.overflow = "";
+}
+
+/* 🔥 OUTSIDE CLICK CLOSE */
+document.getElementById("imgViewer").addEventListener("click", function(e){
+  if(e.target === this){
+    closeImage();
+  }
+});
+
+/* 🔥 PREVENT CLOSE WHEN CLICKING IMAGE */
+document.getElementById("viewerSlider").addEventListener("click", function(e){
+  e.stopPropagation();
+});
+
+window.addEventListener("load", function(){
+  document.getElementById("appLoader").style.display = "none";
+});
+
+let scrollPosition = 0;
+
+// 🔥 OPEN POPUP (NO JUMP)
+function openPopup(id){
+
+  scrollPosition = window.scrollY; // save position
+
+  const popup = document.getElementById(id);
+  popup.style.display = "block";
+
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollPosition}px`;
+  document.body.style.width = "100%";
+}
+
+
+// 🔥 CLOSE POPUP (RESTORE POSITION)
+function closePopup(el){
+
+  const popup = el.closest(".popupPage");
+
+  if(popup){
+    popup.style.display = "none";
+  }
+
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.width = "";
+
+  window.scrollTo(0, scrollPosition);
+}
+
+function toggleFAQ(el){
+  const item = el.parentElement;
+
+  item.classList.toggle("active");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Load saved cart
+  let cart = JSON.parse(localStorage.getItem("riceCart")) || [];
+
+  const items = document.querySelectorAll(".riceItem");
+
+  items.forEach((item) => {
+
+    const btn = item.querySelector(".riceAdd");
+    const name = item.querySelector(".riceName").textContent;
+    const price = parseInt(item.dataset.price);
+    const type = item.dataset.type; // ✅ veg / nonveg
+
+    // Restore state after refresh
+    if(cart.some(i => i.name === name)){
+      btn.textContent = "Remove";
+      btn.classList.add("active");
+    }
+
+    btn.addEventListener("click", () => {
+
+      if(btn.classList.contains("active")){
+        // REMOVE
+        btn.textContent = "Add";
+        btn.classList.remove("active");
+
+        cart = cart.filter(i => i.name !== name);
+
+      } else {
+        // ADD
+        btn.textContent = "Remove";
+        btn.classList.add("active");
+
+        // ✅ prevent duplicate
+        if(!cart.some(i => i.name === name)){
+          cart.push({ name, price, type });
+        }
+      }
+
+      // Save to localStorage
+      localStorage.setItem("riceCart", JSON.stringify(cart));
+
+      updateBill(); // 🔥 live update
+      console.log(cart);
+    });
+
+  });
+
+});
+
+const plateInput = document.getElementById("plateCount");
+
+const totalPlates = document.getElementById("totalPlates");
+const totalAmount = document.getElementById("totalAmount");
+const extraChargeText = document.getElementById("extraChargeText");
+const totalItems = document.getElementById("totalItems");
+
+const bookBtn = document.querySelector(".riceBookNow");
+
+const EXTRA_CHARGE = 100;
+const FREE_LIMIT = 5000;
+const MIN_PLATES = 20;
+
+// 🔄 BILL CALCULATION
+function updateBill(){
+
+  let cart = JSON.parse(localStorage.getItem("riceCart")) || [];
+  let plates = parseInt(plateInput.value) || 0;
+
+  // ✅ Total items count
+  totalItems.textContent = cart.length;
+
+  // ❌ No items selected
+  if(cart.length === 0){
+    totalPlates.textContent = plates || 0;
+    totalAmount.textContent = "₹0";
+    extraChargeText.textContent = "₹0";
+    return;
+  }
+
+  // No plates
+  if(plates === 0){
+    totalPlates.textContent = 0;
+    totalAmount.textContent = "₹0";
+    extraChargeText.textContent = "₹0";
+    return;
+  }
+
+  // Minimum validation
+  if(plates < MIN_PLATES){
+    totalPlates.textContent = "Minimum 20 required";
+    totalAmount.textContent = "₹0";
+    extraChargeText.textContent = "₹0";
+    return;
+  }
+
+  totalPlates.textContent = plates;
+
+  let perPlate = cart.reduce((sum, item) => sum + item.price, 0);
+
+  let baseTotal = perPlate * plates;
+
+  let extra = baseTotal >= FREE_LIMIT ? 0 : EXTRA_CHARGE;
+
+  let finalTotal = baseTotal + extra;
+
+  totalAmount.textContent = "₹" + finalTotal;
+  extraChargeText.textContent = extra === 0 ? "FREE" : "₹100";
+}
+// 🔁 UPDATE ON INPUT
+plateInput.addEventListener("input", updateBill);
+updateBill();
+
+
+// 🎯 BOOK BUTTON LOGIC (NO ALERT — SHAKE)
+bookBtn.addEventListener("click", () => {
+
+  let cart = JSON.parse(localStorage.getItem("riceCart")) || [];
+  let plates = parseInt(plateInput.value) || 0;
+
+  // ❌ No items selected
+  if(cart.length === 0){
+    shakeElement(bookBtn);
+    return;
+  }
+
+  // ❌ Plates less than 20
+  if(plates < MIN_PLATES){
+    shakeElement(plateInput);
+    return;
+  }
+
+  // ✅ SUCCESS
+  bookBtn.textContent = "Booked ✓";
+  bookBtn.style.background = "#4caf50";
+});
+
+
+// 🔁 SHAKE FUNCTION
+function shakeElement(el){
+  el.classList.add("shake");
+  setTimeout(() => {
+    el.classList.remove("shake");
+  }, 400);
+}
+let cateringBoys = true; // 🔥 default YES
+
+const boysYes = document.getElementById("boysYes");
+const boysNo = document.getElementById("boysNo");
+
+// Load saved state
+const savedBoys = localStorage.getItem("cateringBoys");
+if(savedBoys !== null){
+  cateringBoys = savedBoys === "true";
+}
+
+updateToggleUI();
+
+boysYes.addEventListener("click", () => {
+  cateringBoys = true;
+  saveToggle();
+});
+
+boysNo.addEventListener("click", () => {
+  cateringBoys = false;
+  saveToggle();
+});
+
+function saveToggle(){
+  localStorage.setItem("cateringBoys", cateringBoys);
+  updateToggleUI();
+}
+
+function updateToggleUI(){
+  if(cateringBoys){
+    boysYes.classList.add("active");
+    boysNo.classList.remove("active");
+  } else {
+    boysNo.classList.add("active");
+    boysYes.classList.remove("active");
+  }
+}
+
+
+
+/* OPEN BOOKING POPUP */
+/* OPEN BOOKING POPUP */
+
+function openBookingPopup(serviceName){
+
+  document.getElementById("bookingPopup").style.display = "flex";
+
+  document.getElementById("selectedService").value = serviceName;
+
+  document.body.classList.add("popup-open");
+
+
+  /* FIELDS */
+
+  const decorationField =
+  document.getElementById("decorationTypeField");
+
+  const eventField =
+  document.getElementById("eventTypeField");
+
+  const decorationSelect =
+  document.getElementById("decorationType");
+
+  const eventSelect =
+  document.getElementById("eventType");
+
+
+  /* RESET */
+
+  decorationField.style.display = "none";
+
+  eventField.style.display = "none";
+
+  decorationSelect.innerHTML =
+  `<option value="">Select Decoration</option>`;
+
+  eventSelect.innerHTML =
+  `<option value="">Select Event</option>`;
+
+
+  /* ONLY EVENT TYPE */
+
+  if(
+
+    serviceName === "Balloon Decoration" ||
+    serviceName === "Flower Decoration" ||
+    serviceName === "LED Decoration" ||
+    serviceName === "House Warming Decoration" ||
+    serviceName === "Male Makeup" ||
+    serviceName === "Female Makeup" ||
+    serviceName === "Photo Shoot" ||
+    serviceName === "Video Shooting"
+
+  ){
+
+    eventField.style.display = "block";
+
+
+    let events = [
+
+      "Birthday",
+      "Anniversary",
+      "Wedding",
+      "Reception",
+      "Baby Shower",
+      "Engagement",
+      "House Warming",
+      "Party"
+
+    ];
+
+
+    events.forEach(item=>{
+
+      eventSelect.innerHTML +=
+      `<option value="${item}">${item}</option>`;
+
+    });
+
+  }
+
+
+
+  /* TEMPLE + SURPRISE */
+
+  else if(
+
+    serviceName === "Temple Decoration" ||
+    serviceName === "Surprise Room Setup"
+
+  ){
+
+    decorationField.style.display = "block";
+
+    eventField.style.display = "block";
+
+
+    let decorations = [
+
+      "Wall Decoration",
+      "Stage Decoration",
+      "Room Decoration",
+      "Full Decoration"
+
+    ];
+
+
+    let events = [
+
+      "Birthday",
+      "Anniversary",
+      "Proposal",
+      "Wedding",
+      "Festival"
+
+    ];
+
+
+    decorations.forEach(item=>{
+
+      decorationSelect.innerHTML +=
+      `<option value="${item}">${item}</option>`;
+
+    });
+
+
+    events.forEach(item=>{
+
+      eventSelect.innerHTML +=
+      `<option value="${item}">${item}</option>`;
+
+    });
+
+  }
+
+}
+
+
+
+/* CLOSE */
+
+function closeBookingPopup(){
+
+  document.getElementById("bookingPopup").style.display = "none";
+
+  document.body.classList.remove("popup-open");
+
+}
+
+
+
+/* LOCATION DETECT */
+
+function detectLocation(){
+
+  if(navigator.geolocation){
+
+    navigator.geolocation.getCurrentPosition(
+
+      async function(position){
+
+        let lat = position.coords.latitude;
+
+        let lon = position.coords.longitude;
+
+        try{
+
+          let response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+          );
+
+          let data = await response.json();
+
+          document.getElementById("customerAddress").value =
+          data.display_name;
+
+        }
+
+        catch(err){
+
+          document.getElementById("customerAddress").placeholder =
+          "Enter your address";
+
+        }
+
+      },
+
+      function(){
+
+        document.getElementById("customerAddress").placeholder =
+        "Enter your address";
+
+      }
+
+    );
+
+  }
+
+  else{
+
+    document.getElementById("customerAddress").placeholder =
+    "Enter your address";
+
+  }
+
+}
+
+
+
+/* BUTTON LINKS */
+
+document.getElementById("balloonBookBtn")
+.addEventListener("click",()=>openBookingPopup("Balloon Decoration"));
+
+document.getElementById("flowerBookBtn")
+.addEventListener("click",()=>openBookingPopup("Flower Decoration"));
+
+document.getElementById("ledBookBtn")
+.addEventListener("click",()=>openBookingPopup("LED Decoration"));
+
+document.getElementById("housewarmBookBtn")
+.addEventListener("click",()=>openBookingPopup("House Warming Decoration"));
+
+document.getElementById("templeBookBtn")
+.addEventListener("click",()=>openBookingPopup("Temple Decoration"));
+
+document.getElementById("supriseBookBtn")
+.addEventListener("click",()=>openBookingPopup("Surprise Room Setup"));
+
+document.getElementById("femaleBookBtn")
+.addEventListener("click",()=>openBookingPopup("Female Makeup"));
+
+document.getElementById("maleBookBtn")
+.addEventListener("click",()=>openBookingPopup("Male Makeup"));
+
+document.getElementById("photoBookBtn")
+.addEventListener("click",()=>openBookingPopup("Photo Shoot"));
+
+document.getElementById("videoBookBtn")
+.addEventListener("click",()=>openBookingPopup("Video Shooting"));
+</script>
+
+</body>
+</html>

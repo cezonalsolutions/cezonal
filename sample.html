@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Razorpay Test Payment</title>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <style>
+    body{
+      font-family: Arial;
+      background:#f2f2f2;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+
+    .box{
+      background:white;
+      padding:30px;
+      border-radius:12px;
+      text-align:center;
+      width:320px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h2{
+      margin-bottom:10px;
+    }
+
+    .price{
+      font-size:40px;
+      color:green;
+      margin:20px 0;
+      font-weight:bold;
+    }
+
+    button{
+      background:#3399cc;
+      color:white;
+      border:none;
+      padding:14px;
+      width:100%;
+      border-radius:8px;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#267aa3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Razorpay Test</h2>
+
+  <p>Pay ₹10 using test mode</p>
+
+  <div class="price">₹10</div>
+
+  <button onclick="payNow()">Pay Now</button>
+</div>
+
+<script>
+
+function payNow(){
+
+  var options = {
+
+    key: "rzp_test_SqIXyJ1xyzyJDH",
+
+    amount: "1000", // ₹10
+
+    currency: "INR",
+
+    name: "CEZONAL SOLUTIONS PRIVATE LIMITED",
+
+    description: "Test Payment",
+
+    image: "https://razorpay.com/assets/razorpay-logo.svg",
+
+    handler: function (response){
+
+      alert("Payment Successful");
+
+      alert("Payment ID: " + response.razorpay_payment_id);
+    },
+
+    prefill: {
+      name: "Test User",
+      email: "test@example.com",
+      contact: "9999999999"
+    },
+
+    theme: {
+      color: "#3399cc"
+    }
+
+  };
+
+  var rzp1 = new Razorpay(options);
+
+  rzp1.on('payment.failed', function (response){
+
+    alert("Payment Failed");
+
+    console.log(response.error);
+
+  });
+
+  rzp1.open();
+
+}
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+# Full Screen Categories Popup
+
+Add this HTML near bottom of `index.html` BEFORE `</body>`:
+
+```html
+<!-- FULL PAGE CATEGORY POPUP -->
+
+```
+
+---
+
+Add this CSS:
+
+```css
+/* FULLSCREEN CATEGORY POPUP */
+
+```
+
+---
+
+Replace this:
+
+```html
+<div class="navItem" onclick="smoothNavigate('categories.html')">
+```
+
+WITH:
+
+```html
+<div class="navItem" onclick="openCategoriesPopup()">
+```
+
+---
+
+Add this JS:
+
+```js
+function openCategoriesPopup(){
+
+  document
+    .getElementById("categoriesPopup")
+    .classList.add("show");
+
+  document.body.style.overflow = "hidden";
+
+}
+
+function closeCategoriesPopup(){
+
+  document
+    .getElementById("categoriesPopup")
+    .classList.remove("show");
+
+  document.body.style.overflow = "auto";
+
+}
+```

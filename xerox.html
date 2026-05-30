@@ -1,0 +1,2972 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Print Studio</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
+<style>
+
+/* =========================
+   RESET
+========================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#f5f7fb;
+  font-family:Inter,sans-serif;
+  color:#111827;
+}
+body::after{
+  content:"";
+
+  position:fixed;
+
+  left:0;
+  bottom:-200px;
+
+  width:100%;
+  height:300px;
+
+  background:#ffffff;
+
+  z-index:-1;
+}
+/* =========================
+   PAGE
+========================= */
+
+.printStudio{
+  min-height:100vh;
+}
+
+/* =========================
+   TOP
+========================= */
+
+.topBar{
+  padding:
+  58px 18px 20px;
+
+  background:#fff;
+
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  border-bottom:
+  1px solid #eef2f7;
+}
+
+.backBtn{
+  width:42px;
+  height:42px;
+
+  border-radius:14px;
+
+  background:#f1f5f9;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:20px;
+}
+
+.topText h2{
+  font-size:24px;
+  font-weight:800;
+}
+
+.topText p{
+  font-size:12px;
+  color:#64748b;
+
+  margin-top:4px;
+}
+
+/* =========================
+   SCROLL
+========================= */
+
+.mainScroll{
+
+  padding:
+  18px 18px 10px;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.heroCard{
+  position:relative;
+
+  background:
+  linear-gradient(
+    135deg,
+    #2563eb,
+    #60a5fa
+  );
+
+  border-radius:32px;
+
+  overflow:hidden;
+
+  padding:24px;
+
+  margin-bottom:18px;
+
+  min-height:220px;
+}
+
+.heroGlow{
+  position:absolute;
+
+  width:200px;
+  height:200px;
+
+  border-radius:50%;
+
+  background:
+  rgba(255,255,255,.14);
+
+  top:-70px;
+  right:-40px;
+}
+
+.heroTop{
+  position:relative;
+  z-index:2;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+.heroLeft{
+  width:60%;
+}
+
+.heroLeft h3{
+  font-size:28px;
+  line-height:1.2;
+
+  color:#fff;
+
+  font-weight:800;
+}
+
+.heroLeft p{
+  font-size:13px;
+  line-height:1.7;
+
+  color:rgba(255,255,255,.92);
+
+  margin-top:12px;
+}
+
+/* IMAGE */
+
+.heroImageWrap{
+  width:110px;
+  height:110px;
+
+  border-radius:28px;
+
+  
+  backdrop-filter:blur(10px);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.heroImg{
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+}
+
+/* =========================
+   SWITCH
+========================= */
+
+.switchWrap{
+  margin-top:24px;
+
+  position:relative;
+  z-index:2;
+
+  display:flex;
+  gap:12px;
+}
+
+.switchBtn{
+  flex:1;
+
+  height:54px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:
+  rgba(255,255,255,.14);
+
+  color:#fff;
+
+  font-size:14px;
+  font-weight:700;
+
+  backdrop-filter:blur(10px);
+
+  transition:.2s ease;
+}
+
+.switchBtn.active{
+  background:#fff;
+  color:#2563eb;
+}
+
+/* =========================
+   UPLOAD
+========================= */
+
+.uploadCard{
+  background:#fff;
+
+  border-radius:28px;
+
+  padding:22px;
+
+  display:flex;
+  align-items:center;
+  gap:16px;
+
+  margin-bottom:18px;
+
+  box-shadow:
+  0 12px 28px rgba(15,23,42,.06);
+}
+
+.uploadIcon{
+  width:60px;
+  height:60px;
+
+  border-radius:20px;
+
+  background:#eff6ff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#2563eb;
+
+  font-size:24px;
+}
+
+.uploadText h4{
+  font-size:17px;
+  font-weight:700;
+}
+
+.uploadText p{
+  font-size:12px;
+  color:#64748b;
+
+  margin-top:5px;
+
+  line-height:1.6;
+}
+
+/* =========================
+   HEADING
+========================= */
+
+.sideHeading{
+  font-size:16px;
+  font-weight:800;
+
+  margin-bottom:14px;
+
+  color:#111827;
+}
+
+/* =========================
+   FILE CARD
+========================= */
+
+.fileCard{
+  background:#fff;
+
+  border-radius:28px;
+position:relative;
+overflow:hidden;
+  padding:18px;
+
+  margin-bottom:14px;
+
+  box-shadow:
+  0 12px 28px rgba(15,23,42,.05);
+}
+
+.fileTop{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.fileLeft{
+  display:flex;
+  gap:14px;
+
+  overflow:hidden;
+}
+
+.fileIcon{
+  width:58px;
+  height:58px;
+
+  border-radius:18px;
+
+  background:#eff6ff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#2563eb;
+
+  font-size:24px;
+}
+
+.previewImg{
+  width:58px;
+  height:58px;
+
+  border-radius:18px;
+
+  object-fit:cover;
+}
+
+.fileInfo{
+  overflow:hidden;
+}
+
+.fileName{
+  font-size:14px;
+  font-weight:700;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+  max-width:150px;
+}
+
+.fileSub{
+  font-size:12px;
+  color:#64748b;
+
+  margin-top:5px;
+
+  line-height:1.7;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.fileActions{
+  display:flex;
+  align-items:center;
+
+  gap:8px;
+}
+
+.qtyBtn{
+  width:30px;
+  height:30px;
+
+  border:none;
+
+  border-radius:10px;
+
+  background:#111827;
+
+  color:#fff;
+
+  font-size:18px;
+}
+
+.qtyCount{
+  min-width:24px;
+
+  text-align:center;
+
+  font-size:14px;
+  font-weight:700;
+}
+
+/* =========================
+   SELECT
+========================= */
+
+.selectWrap{
+  margin-top:16px;
+}
+
+.selectWrap label{
+  display:block;
+
+  font-size:12px;
+  font-weight:700;
+
+  color:#64748b;
+
+  margin-bottom:8px;
+}
+
+.printType{
+  width:100%;
+  height:50px;
+
+  border:none;
+
+  border-radius:16px;
+
+  background:#f8fafc;
+
+  padding:0 16px;
+
+  font-size:14px;
+  font-weight:600;
+
+  outline:none;
+}
+
+/* =========================
+   PRICE
+========================= */
+
+.priceCard{
+  background:#fff;
+
+  border-radius:28px;
+
+  padding:22px;
+
+  margin-top:18px;
+
+  box-shadow:
+  0 12px 28px rgba(15,23,42,.05);
+}
+
+.priceTitle{
+  font-size:17px;
+  font-weight:800;
+
+  margin-bottom:14px;
+}
+
+.priceRow{
+  display:flex;
+  justify-content:space-between;
+
+  padding:14px 0;
+
+  font-size:14px;
+}
+
+.priceRow:not(:last-child){
+  border-bottom:
+  1px solid #eef2f7;
+}
+
+/* =========================
+   NOTE
+========================= */
+
+.noteCard{
+  background:#fff7ed;
+
+  border:
+  1px solid #fed7aa;
+
+  border-radius:24px;
+
+  padding:18px;
+
+  margin-top:18px;
+
+  font-size:13px;
+  line-height:1.8;
+
+  color:#9a3412;
+}
+
+/* =========================
+   BOTTOM
+========================= */
+
+.photoMinNote{
+
+  margin-top:14px;
+
+  padding:12px 14px;
+
+  border-radius:16px;
+
+  background:#fff7ed;
+
+  border:1px solid #fed7aa;
+
+  font-size:12px;
+  font-weight:600;
+
+  color:#9a3412;
+}
+.filePrice{
+
+  margin-top:2px;
+
+  font-size:13px;
+  font-weight:700;
+
+  color:#16a34a;
+}
+.switchNote{
+
+  margin-top:12px;
+
+  text-align:center;
+
+  font-size:12px;
+  font-weight:600;
+
+  color:rgba(255,255,255,.85);
+
+}
+
+.uploadProgress{
+
+  position:absolute;
+
+  top:0;
+  left:0;
+
+  height:100%;
+  width:0%;
+
+  border-radius:28px;
+
+  background:
+  linear-gradient(
+    90deg,
+    rgba(34,197,94,.15),
+    rgba(34,197,94,.3)
+  );
+
+  transition:width .25s linear;
+
+  pointer-events:none;
+}
+/* FLOATING BAR */
+
+.bottomBar{
+
+  position:fixed;
+
+  left:12px;
+  right:12px;
+  bottom:14px;
+
+  background:transparent;
+
+  z-index:100;
+}
+
+/* BUTTON */
+
+.addBtn{
+
+  width:100%;
+
+  height:54px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #2563eb,
+    #60a5fa
+  );
+
+  color:#fff;
+
+  font-size:15px;
+  font-weight:700;
+
+  box-shadow:
+  0 14px 30px rgba(37,99,235,.22);
+
+  transition:.2s ease;
+}
+
+/* CLICK */
+
+.addBtn:active{
+
+  transform:scale(.97);
+}
+/* MAIN SLIDER */
+
+/* MAIN SLIDER */
+.sliderWrap{
+
+  width:100%;
+
+  padding:8px;
+
+  margin-bottom:calc(
+    18px + env(safe-area-inset-bottom)
+  );
+
+  background:#fff;
+
+  border-radius:26px;
+
+  box-sizing:border-box;
+
+  overflow:hidden;
+
+}
+
+.xeroxSlider{
+
+  position:relative;
+
+  width:100%;
+  height:58px;
+
+  border-radius:18px;
+
+  background:#111;
+
+  overflow:hidden;
+
+  user-select:none;
+
+  touch-action:none; /* 🔥 IMPORTANT */
+
+  -webkit-user-select:none;
+
+  -webkit-touch-callout:none;
+
+}
+
+/* TEXT */
+
+.xeroxSliderText{
+
+  position:absolute;
+  inset:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#fff;
+
+  font-size:15px;
+  font-weight:700;
+
+  letter-spacing:.3px;
+
+  pointer-events:none;
+
+  transition:.2s ease;
+
+}
+
+/* THUMB */
+
+.xeroxThumb{
+
+  position:absolute;
+
+  left:6px;
+  top:6px;
+
+  width:46px;
+  height:46px;
+
+  border-radius:14px;
+
+  background:#fff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  z-index:5;
+
+  cursor:pointer;
+
+  touch-action:none; /* 🔥 IMPORTANT */
+
+  box-shadow:
+  0 2px 10px rgba(0,0,0,.12);
+
+}
+
+/* ICON */
+
+.xeroxThumb i{
+
+  font-size:20px;
+
+  color:#111;
+
+  animation:arrowMove 1s infinite;
+}
+
+@keyframes arrowMove{
+
+  0%{
+    transform:translateX(0);
+  }
+
+  50%{
+    transform:translateX(4px);
+  }
+
+  100%{
+    transform:translateX(0);
+  }
+
+}
+/* SUCCESS POPUP */
+@keyframes sheetUp{
+
+  from{
+    transform:translateY(100%);
+  }
+
+  to{
+    transform:translateY(0);
+  }
+
+}
+#xeroxSuccessPopup{
+
+  position:fixed;
+  inset:0;
+
+  background:
+  rgba(255,255,255,.96);
+
+  z-index:99999;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  opacity:0;
+
+  transition:.35s ease;
+}
+
+#xeroxSuccessPopup.show{
+
+  opacity:1;
+}
+
+.successCenter{
+
+  text-align:center;
+
+  transform:scale(.8);
+
+  opacity:0;
+
+  transition:.4s ease;
+}
+
+#xeroxSuccessPopup.show .successCenter{
+
+  transform:scale(1);
+
+  opacity:1;
+}
+
+.successTick{
+
+  width:96px;
+  height:96px;
+
+  margin:auto;
+
+  border-radius:50%;
+
+  background:#22c55e;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  animation:tickPop .45s ease;
+}
+
+.successTick i{
+
+  color:#fff;
+
+  font-size:42px;
+}
+
+.successTitle{
+
+  margin-top:22px;
+
+  font-size:28px;
+  font-weight:800;
+
+  color:#111;
+}
+
+.successSub{
+
+  margin-top:10px;
+
+  font-size:15px;
+
+  color:#6b7280;
+}
+
+@keyframes tickPop{
+
+  0%{
+    transform:scale(.3);
+  }
+
+  70%{
+    transform:scale(1.08);
+  }
+
+  100%{
+    transform:scale(1);
+  }
+
+}
+.iosSpinner{
+
+  width:20px;
+  height:20px;
+
+  border-radius:50%;
+
+  border:2.5px solid
+  rgba(37,99,235,.18);
+
+  border-top-color:#2563eb;
+
+  animation:iosSpin .7s linear infinite;
+
+}
+
+@keyframes iosSpin{
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="printStudio">
+
+  <!-- TOP -->
+  <div class="topBar">
+
+   <div class="backBtn"
+     onclick="goBackHome()">
+
+  <i class="fa fa-angle-left"></i>
+
+</div>
+
+    <div class="topText">
+
+      <h2>
+        Print Studio
+      </h2>
+
+      <p>
+        Xerox & Passport Photos
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- SCROLL -->
+  <div class="mainScroll">
+
+    <!-- HERO -->
+    <div class="heroCard">
+
+      <div class="heroGlow"></div>
+
+      <div class="heroTop">
+
+        <div class="heroLeft">
+
+          <h3 id="heroTitle">
+
+            Fast Xerox
+            Printing
+
+          </h3>
+
+          <p id="heroDesc">
+
+            Upload PDF documents
+            and print instantly.
+
+          </p>
+
+        </div>
+
+        <div class="heroImageWrap">
+
+          <img src="xerox.png"
+               id="heroImage"
+               class="heroImg">
+
+        </div>
+
+      </div>
+
+      <!-- SWITCH -->
+      <div class="switchWrap">
+
+        <button class="switchBtn active"
+                id="xeroxBtn">
+
+          Xerox
+
+        </button>
+
+        <button class="switchBtn"
+                id="photoBtn">
+
+          Passport
+
+        </button>
+
+      </div>
+      <div class="switchNote">
+
+  Select Here
+
+</div>
+
+    </div>
+
+    <!-- UPLOAD -->
+    <div class="uploadCard"
+         id="uploadTrigger">
+
+      <div class="uploadIcon">
+
+        <i class="fa fa-cloud-upload"></i>
+
+      </div>
+
+      <div class="uploadText">
+
+        <h4 id="uploadTitle">
+
+          Upload PDF
+
+        </h4>
+
+        <p id="uploadSub">
+
+          PDF documents only
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- INPUTS -->
+
+    <input type="file"
+           id="pdfInput"
+           accept=".pdf,application/pdf"
+           hidden>
+
+    <input type="file"
+           id="photoInput"
+           accept="image/*"
+           hidden>
+
+    <!-- HEADING -->
+
+    <div id="sideHeading"
+         class="sideHeading hidden">
+
+      Added Files
+
+    </div>
+
+    <!-- LIST -->
+
+    <div id="fileList"></div>
+<div id="totalCard"
+     class="priceCard hidden">
+
+  <div class="priceTitle">
+
+    Order Summary
+
+  </div>
+
+  <div class="priceRow">
+
+    <span>
+      Total
+    </span>
+
+    <b id="grandTotal">
+
+      ₹0
+
+    </b>
+
+  </div>
+
+</div>
+    <!-- PRICE -->
+
+    <div class="priceCard">
+
+      <div class="priceTitle">
+
+        Pricing
+
+      </div>
+
+      <div class="priceRow">
+
+        <span>
+          Black & White
+        </span>
+
+        <b>
+          ₹5 / Page
+        </b>
+
+      </div>
+
+      <div class="priceRow">
+
+        <span>
+          Color Print
+        </span>
+
+        <b>
+          ₹10 / Page
+        </b>
+
+      </div>
+
+      <div class="priceRow">
+
+        <span>
+          Passport Photos
+        </span>
+
+        <b>
+          ₹40 / 4 Copies
+        </b>
+
+      </div>
+
+    </div>
+
+    <!-- NOTE -->
+
+    <div class="noteCard">
+
+      <b>
+        Note:
+      </b>
+
+      Passport photos support
+      JPG, PNG, WEBP and all
+      image formats.
+
+      Xerox supports PDF only.
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM -->
+<div class="sliderWrap">
+
+<!-- XEROX SLIDER -->
+<div class="xeroxSlider"
+     id="xeroxSlider">
+
+  <!-- TEXT -->
+  <div class="xeroxSliderText"
+       id="xeroxSliderText">
+
+    Slide to Book
+
+  </div>
+
+  <!-- THUMB -->
+  <div class="xeroxThumb"
+       id="xeroxThumb">
+
+    <i class="fa-solid fa-angle-right"></i>
+
+  </div>
+
+</div>
+
+</div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script>
+const supabaseUrl =
+"https://izoipzriynkcjtwuzrfu.supabase.co";
+
+const supabaseKey =
+"sb_publishable_7ZRL1Y4JAppLTJonepuTIw_UQyGjVVw";
+
+window.supabaseClient =
+window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+);
+/* =========================
+   MODE
+========================= */
+
+let currentMode = "xerox";
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const xeroxBtn =
+document.getElementById(
+  "xeroxBtn"
+);
+
+const photoBtn =
+document.getElementById(
+  "photoBtn"
+);
+
+/* =========================
+   SWITCH XEROX
+========================= */
+
+xeroxBtn.onclick = function(){
+
+  currentMode = "xerox";
+
+  xeroxBtn.classList.add(
+    "active"
+  );
+
+  photoBtn.classList.remove(
+    "active"
+  );
+
+  document
+  .getElementById(
+    "heroImage"
+  )
+  .src = "xerox.png";
+
+  document
+  .getElementById(
+    "heroTitle"
+  )
+  .innerHTML =
+  "Fast Xerox Printing";
+
+  document
+  .getElementById(
+    "heroDesc"
+  )
+  .innerHTML =
+  "Upload PDF documents and print instantly.";
+
+  document
+  .getElementById(
+    "uploadTitle"
+  )
+  .innerHTML =
+  "Upload PDF";
+
+  document
+  .getElementById(
+    "uploadSub"
+  )
+  .innerHTML =
+  "PDF documents only";
+
+};
+
+/* =========================
+   SWITCH PHOTO
+========================= */
+
+photoBtn.onclick = function(){
+
+  currentMode = "photo";
+
+  photoBtn.classList.add(
+    "active"
+  );
+
+  xeroxBtn.classList.remove(
+    "active"
+  );
+
+  document
+  .getElementById(
+    "heroImage"
+  )
+  .src = "bahnu.webp";
+
+  document
+  .getElementById(
+    "heroTitle"
+  )
+  .innerHTML =
+  "Passport Size Photos";
+
+  document
+  .getElementById(
+    "heroDesc"
+  )
+  .innerHTML =
+  "Upload photos for passport, visa and ID cards.";
+
+  document
+  .getElementById(
+    "uploadTitle"
+  )
+  .innerHTML =
+  "Upload Photo";
+
+  document
+  .getElementById(
+    "uploadSub"
+  )
+  .innerHTML =
+  "JPG, PNG, WEBP supported";
+
+};
+
+/* =========================
+   UPLOAD
+========================= */
+document
+.getElementById(
+  "uploadTrigger"
+)
+.onclick = function(){
+
+  /* RESET INPUTS */
+
+  document
+  .getElementById(
+    "pdfInput"
+  )
+  .value = "";
+
+  document
+  .getElementById(
+    "photoInput"
+  )
+  .value = "";
+
+  if(currentMode === "xerox"){
+
+    document
+    .getElementById(
+      "pdfInput"
+    )
+    .click();
+
+  }else{
+
+    document
+    .getElementById(
+      "photoInput"
+    )
+    .click();
+
+  }
+
+};
+
+/* =========================
+   PDF
+========================= */
+document
+.getElementById("pdfInput")
+.addEventListener(
+"change",
+async function(e){
+
+  const file =
+    e.target.files[0];
+
+  if(!file) return;
+
+  document
+  .getElementById(
+    "sideHeading"
+  )
+  .classList.remove(
+    "hidden"
+  );
+
+  /* PDF PAGES */
+
+  const buffer =
+    await file.arrayBuffer();
+
+  const pdf =
+    await pdfjsLib
+    .getDocument({
+      data:buffer
+    }).promise;
+
+  const pages =
+    pdf.numPages;
+
+  /* SAVE REAL PDF */
+
+  const reader =
+    new FileReader();
+
+  reader.onload = function(ev){
+
+    const base64 =
+      ev.target.result;
+
+    createPdfCard(
+      file,
+      pages,
+      base64
+    );
+
+  };
+
+  reader.readAsDataURL(file);
+
+});
+/* =========================
+   CREATE PDF
+========================= */
+
+function createPdfCard(
+  file,
+  pages,
+  pdfSrc = ""
+){
+
+  const list =
+    document
+    .getElementById(
+      "fileList"
+    );
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.className =
+    "fileCard";
+    const progress =
+document.createElement("div");
+
+progress.className =
+"uploadProgress";
+
+div.appendChild(progress);
+div.dataset.pdf =
+  pdfSrc;
+  div.innerHTML = `
+
+
+  <div class="fileTop">
+
+    <div class="fileLeft">
+
+      <div class="fileIcon">
+
+<i class="fa fa-print"></i>
+      </div>
+
+      <div class="fileInfo">
+
+        <div class="fileName">
+          ${file.name}
+        </div>
+
+        <div class="fileSub">
+
+  ${pages} Pages
+
+</div>
+
+<div class="filePrice">
+
+  ₹${pages * 5}
+
+</div>
+
+      </div>
+
+    </div>
+
+    <div class="fileActions">
+
+      <button class="qtyBtn minusBtn">
+        -
+      </button>
+
+      <div class="qtyCount">
+        1
+      </div>
+
+      <button class="qtyBtn plusBtn">
+        +
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="selectWrap">
+
+    <label>
+
+      Print Type
+
+    </label>
+
+    <select class="printType">
+
+      <option>
+        Black & White
+      </option>
+
+      <option>
+        Color Print
+      </option>
+
+    </select>
+
+  </div>
+
+  `;
+
+  div.style.opacity = "0";
+
+div.style.transform =
+"translateY(20px)";
+
+list.appendChild(div);
+
+setTimeout(() => {
+
+  div.style.transition =
+  ".3s ease";
+
+  div.style.opacity = "1";
+
+  div.style.transform =
+  "translateY(0)";
+
+},10);
+
+updateGrandTotal();
+saveData();
+qtyLogic(div);
+
+}
+
+/* =========================
+   PHOTO
+========================= */
+document
+.getElementById("photoInput")
+.addEventListener(
+"change",
+function(e){
+
+  const file =
+    e.target.files[0];
+
+  if(!file) return;
+
+  const reader =
+    new FileReader();
+
+  reader.onload = function(ev){
+
+    const base64 =
+      ev.target.result;
+
+    createPhotoCard(
+      file,
+      base64
+    );
+
+  };
+
+  reader.readAsDataURL(file);
+
+});
+/* =========================
+   PHOTO CARD
+========================= */
+/* =========================
+   PHOTO CARD
+========================= */
+
+function createPhotoCard(
+  file,
+  url
+){
+
+  const list =
+    document
+    .getElementById(
+      "fileList"
+    );
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.className =
+    "fileCard";
+    const progress =
+document.createElement("div");
+
+progress.className =
+"uploadProgress";
+
+div.appendChild(progress);
+
+  div.innerHTML = `
+
+  <div class="fileTop">
+
+    <div class="fileLeft">
+
+      <img src="${url}"
+           class="previewImg">
+
+      <div class="fileInfo">
+
+        <div class="fileName">
+          ${file.name}
+        </div>
+
+       <div class="fileSub">
+
+  Passport Size Photo
+
+</div>
+
+<div class="filePrice photoPrice">
+
+  ₹40
+
+</div>
+
+      </div>
+
+    </div>
+
+    <div class="fileActions">
+
+      <button class="qtyBtn minusBtn">
+        -
+      </button>
+
+      <div class="qtyCount">
+        4
+      </div>
+
+      <button class="qtyBtn plusBtn">
+        +
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- NOTE -->
+
+  <div class="photoMinNote">
+
+    Minimum order:
+    4 photos
+
+  </div>
+
+  `;
+
+  div.style.opacity = "0";
+
+div.style.transform =
+"translateY(20px)";
+
+list.appendChild(div);
+let percent = 0;
+
+const interval =
+setInterval(() => {
+
+  percent += 10;
+
+  progress.style.width =
+    percent + "%";
+
+  if(percent >= 100){
+
+    clearInterval(interval);
+
+    setTimeout(() => {
+
+      progress.style.opacity =
+      "0";
+
+    },200);
+
+  }
+
+},100);
+setTimeout(() => {
+
+  div.style.transition =
+  ".3s ease";
+
+  div.style.opacity = "1";
+
+  div.style.transform =
+  "translateY(0)";
+
+},10);
+
+updateGrandTotal();
+saveData();
+photoQtyLogic(div);
+}
+
+/* =========================
+   PDF QTY
+========================= */
+function qtyLogic(div){
+
+  let qty = 1;
+
+  const minus =
+    div.querySelector(
+      ".minusBtn"
+    );
+
+  const plus =
+    div.querySelector(
+      ".plusBtn"
+    );
+
+  const count =
+    div.querySelector(
+      ".qtyCount"
+    );
+
+  const pagesText =
+    div.querySelector(
+      ".fileSub"
+    );
+
+  const priceText =
+    div.querySelector(
+      ".filePrice"
+    );
+
+  /* ORIGINAL PAGES */
+
+  const originalPages =
+    parseInt(
+      pagesText.innerText
+    );
+
+  /* UPDATE UI */
+
+  function updatePrice(){
+
+  const totalPages =
+    originalPages * qty;
+
+  /* CHECK PRINT TYPE */
+
+  const printType =
+    div.querySelector(
+      ".printType"
+    ).value;
+
+  let perPagePrice = 5;
+
+  if(
+    printType ===
+    "Color Print"
+  ){
+
+    perPagePrice = 10;
+
+  }
+
+  const totalPrice =
+    totalPages *
+    perPagePrice;
+
+  pagesText.innerHTML =
+    totalPages +
+    " Pages";
+
+  priceText.innerHTML =
+    "₹" + totalPrice;
+
+}
+
+  minus.onclick = function(){
+
+    qty--;
+
+    if(qty <= 0){
+
+      div.style.transition =
+".25s ease";
+
+div.style.opacity =
+"0";
+
+div.style.transform =
+"translateX(40px)";
+
+setTimeout(() => {
+
+  div.remove();
+
+  checkEmptyList();
+
+  updateGrandTotal();
+  saveData();
+
+},250);
+
+return;
+
+    }
+
+    count.innerHTML =
+      qty;
+
+    updatePrice();
+updateGrandTotal();
+saveData();
+  };
+
+  plus.onclick = function(){
+/* PRINT TYPE CHANGE */
+
+div
+.querySelector(
+  ".printType"
+)
+.onchange = function(){
+
+  updatePrice();
+updateGrandTotal();
+saveData();
+};
+    qty++;
+
+    count.innerHTML =
+      qty;
+
+    updatePrice();
+updateGrandTotal();
+saveData();
+  };
+
+}
+/* =========================
+   PHOTO QTY
+========================= */
+function photoQtyLogic(div){
+
+  let qty = 4;
+
+  const minus =
+    div.querySelector(
+      ".minusBtn"
+    );
+
+  const plus =
+    div.querySelector(
+      ".plusBtn"
+    );
+
+  const count =
+    div.querySelector(
+      ".qtyCount"
+    );
+
+  const priceText =
+    div.querySelector(
+      ".photoPrice"
+    );
+
+  function updatePrice(){
+
+    const totalPrice =
+      (qty / 4) * 40;
+
+    priceText.innerHTML =
+      "₹" + totalPrice;
+
+  }
+
+  minus.onclick = function(){
+
+    qty--;
+
+    if(qty < 4){
+
+      div.style.transition =
+".25s ease";
+
+div.style.opacity =
+"0";
+
+div.style.transform =
+"translateX(40px)";
+
+setTimeout(() => {
+
+  div.remove();
+
+  checkEmptyList();
+
+  updateGrandTotal();
+  saveData();
+
+},250);
+
+return;
+
+    }
+
+    count.innerHTML =
+      qty;
+
+    updatePrice();
+updateGrandTotal();
+saveData();
+  };
+
+  plus.onclick = function(){
+
+    qty++;
+
+    count.innerHTML =
+      qty;
+
+    updatePrice();
+updateGrandTotal();
+saveData();
+  };
+
+}
+function checkEmptyList(){
+
+  const fileList =
+    document.getElementById(
+      "fileList"
+    );
+
+  const heading =
+    document.getElementById(
+      "sideHeading"
+    );
+
+  const totalCard =
+    document.getElementById(
+      "totalCard"
+    );
+
+  if(
+    fileList.children.length === 0
+  ){
+
+    heading.classList.add(
+      "hidden"
+    );
+
+    totalCard.classList.add(
+      "hidden"
+    );
+
+  }
+
+}
+function saveData(){
+
+  const data = [];
+
+  document
+  .querySelectorAll(".fileCard")
+  .forEach(card => {
+
+    const isPhoto =
+      card.querySelector(".photoPrice");
+
+    const fileName =
+      card.querySelector(
+        ".fileName"
+      ).innerText;
+
+    const fileSub =
+      card.querySelector(
+        ".fileSub"
+      ).innerText;
+
+   const filePrice =
+  parseInt(
+    card.querySelector(
+      ".filePrice"
+    )
+    .innerText
+    .replace("₹","")
+  );
+
+    const qty =
+    
+      card.querySelector(
+        ".qtyCount"
+      ).innerText;
+const totalPrice =
+  filePrice * qty;
+    const printTypeEl =
+      card.querySelector(
+        ".printType"
+      );
+
+    let printType =
+      "Black & White";
+
+    if(printTypeEl){
+
+      printType =
+        printTypeEl.value;
+
+    }
+let pdfSrc = "";
+
+if(!isPhoto){
+
+  pdfSrc =
+    card.dataset.pdf || "";
+
+}
+    let imageSrc = "";
+
+    const img =
+      card.querySelector(
+        ".previewImg"
+      );
+
+    if(img){
+
+      imageSrc = img.src;
+
+    }
+
+    data.push({
+
+      type:isPhoto
+      ? "photo"
+      : "pdf",
+       pdfSrc,
+      fileName,
+      fileSub,
+      price:filePrice,
+      totalPrice,
+      qty,
+      printType,
+      imageSrc
+
+    });
+
+  });
+
+  localStorage.setItem(
+    "printStudio",
+    JSON.stringify(data)
+  );
+  
+
+
+
+}
+function updateGrandTotal(){
+
+  const cards =
+    document.querySelectorAll(
+      ".fileCard"
+    );
+
+  const totalCard =
+    document.getElementById(
+      "totalCard"
+    );
+
+  const grandTotal =
+    document.getElementById(
+      "grandTotal"
+    );
+
+  let total = 0;
+
+  cards.forEach(card => {
+
+    const price =
+      card.querySelector(
+        ".filePrice"
+      );
+
+    if(price){
+
+      const amount =
+        parseInt(
+          price.innerText
+          .replace("₹","")
+        );
+
+      total += amount;
+
+    }
+
+  });
+
+  if(total <= 0){
+
+    totalCard.classList.add(
+      "hidden"
+    );
+
+    return;
+
+  }
+
+  totalCard.classList.remove(
+    "hidden"
+  );
+
+  grandTotal.innerHTML =
+    "₹" + total;
+localStorage.setItem(
+  "xeroxTotal",
+  total
+);
+}
+/* =========================
+   RESTORE DATA
+========================= */
+window.onload = function(){
+
+  const saved =
+    localStorage.getItem(
+      "printStudio"
+    );
+
+  if(!saved) return;
+
+  const data =
+    JSON.parse(saved);
+
+  const fileList =
+    document.getElementById(
+      "fileList"
+    );
+
+  data.forEach(item => {
+
+    const div =
+      document.createElement(
+        "div"
+      );
+
+    div.className =
+      "fileCard";
+div.dataset.pdf =
+  item.pdfSrc || "";
+    /* PDF */
+
+    if(item.type === "pdf"){
+
+      div.innerHTML = `
+
+      <div class="fileTop">
+
+        <div class="fileLeft">
+
+          <div class="fileIcon">
+
+            <i class="fa fa-print"></i>
+
+          </div>
+
+          <div class="fileInfo">
+
+            <div class="fileName">
+              ${item.fileName}
+            </div>
+
+            <div class="fileSub">
+              ${item.fileSub}
+            </div>
+
+            <div class="filePrice">
+  ₹${item.price}
+</div>
+
+          </div>
+
+        </div>
+
+        <div class="fileActions">
+
+          <button class="qtyBtn minusBtn">
+            -
+          </button>
+
+          <div class="qtyCount">
+            ${item.qty}
+          </div>
+
+          <button class="qtyBtn plusBtn">
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="selectWrap">
+
+        <label>
+          Print Type
+        </label>
+
+        <select class="printType">
+
+          <option ${
+            item.printType ===
+            "Black & White"
+            ? "selected"
+            : ""
+          }>
+            Black & White
+          </option>
+
+          <option ${
+            item.printType ===
+            "Color Print"
+            ? "selected"
+            : ""
+          }>
+            Color Print
+          </option>
+
+        </select>
+
+      </div>
+
+      `;
+
+      fileList.appendChild(div);
+
+      qtyLogic(div);
+
+    }
+
+    /* PHOTO */
+
+    else{
+
+      div.innerHTML = `
+
+      <div class="fileTop">
+
+        <div class="fileLeft">
+
+          <img src="${item.imageSrc}"
+               class="previewImg">
+
+          <div class="fileInfo">
+
+            <div class="fileName">
+              ${item.fileName}
+            </div>
+
+            <div class="fileSub">
+              Passport Size Photo
+            </div>
+
+            <div class="filePrice photoPrice">
+  ₹${item.price}
+</div>
+
+          </div>
+
+        </div>
+
+        <div class="fileActions">
+
+          <button class="qtyBtn minusBtn">
+            -
+          </button>
+
+          <div class="qtyCount">
+            ${item.qty}
+          </div>
+
+          <button class="qtyBtn plusBtn">
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="photoMinNote">
+
+        Minimum order:
+        4 photos
+
+      </div>
+
+      `;
+
+      fileList.appendChild(div);
+
+      photoQtyLogic(div);
+
+    }
+
+  });
+
+  if(data.length > 0){
+
+    document
+    .getElementById(
+      "sideHeading"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+    document
+    .getElementById(
+      "totalCard"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+  }
+
+  updateGrandTotal();
+
+};
+function goBackHome(){
+
+  /* SKIP INTRO */
+
+  sessionStorage.setItem(
+    "skipIntro",
+    "true"
+  );
+
+  /* GO HOME */
+
+  window.location.href =
+  "index.html";
+
+}
+/* =======================================
+   XEROX SLIDER LOGIC
+======================================= */
+
+const slider =
+document.getElementById(
+"xeroxSlider"
+);
+
+const thumb =
+document.getElementById(
+"xeroxThumb"
+);
+
+const sliderText =
+document.getElementById(
+"xeroxSliderText"
+);
+
+let isDragging = false;
+
+let startX = 0;
+
+let currentX = 0;
+
+/* MAX */
+
+function getMaxSlide(){
+
+  return (
+    slider.offsetWidth -
+    thumb.offsetWidth - 12
+  );
+
+}
+
+/* START */
+
+function startDrag(e){
+
+  isDragging = true;
+
+  startX =
+  e.touches
+  ? e.touches[0].clientX
+  : e.clientX;
+
+}
+
+/* MOVE */
+
+function moveDrag(e){
+
+  if(!isDragging) return;
+if(e.cancelable){
+  e.preventDefault();
+}
+  const x =
+  e.touches
+  ? e.touches[0].clientX
+  : e.clientX;
+
+  currentX = x - startX;
+
+  if(currentX < 0){
+    currentX = 0;
+  }
+
+  if(currentX > getMaxSlide()){
+    currentX = getMaxSlide();
+  }
+
+  thumb.style.transform =
+  `translateX(${currentX}px)`;
+
+  /* TEXT FADE */
+  sliderText.style.opacity =
+  1 - currentX / 120;
+
+}
+
+/* END */
+
+async function endDrag(){
+
+  if(!isDragging) return;
+
+  isDragging = false;
+
+  /* NOT FULL */
+  if(currentX < getMaxSlide() * 0.88){
+
+    resetSlider();
+
+    return;
+
+  }
+
+  /* FULL SLIDE */
+  thumb.style.transform =
+  `translateX(${getMaxSlide()}px)`;
+
+  /* ===================================
+     CHECK FILES
+  =================================== */
+
+  const items =
+JSON.parse(
+  localStorage.getItem(
+    "printStudio"
+  ) || "[]"
+);
+
+if(items.length === 0){
+
+  resetSlider();
+
+  return;
+
+}
+
+  /* ===================================
+     LOGIN CHECK
+  =================================== */
+
+  const userName =
+  localStorage.getItem(
+    "userName"
+  );
+
+  const userMobile =
+  localStorage.getItem(
+    "userMobile"
+  );
+
+  if(!userName || !userMobile){
+
+    window.location.href =
+    "login.html";
+
+    return;
+
+  }
+
+  /* ===================================
+     LOADER
+  =================================== */
+
+  thumb.innerHTML = `
+<div class="iosSpinner"></div>
+`;
+
+  /* ===================================
+     PAYMENT
+  =================================== */
+
+  startRazorpayPayment();
+
+}
+
+/* RESET */
+
+function resetSlider(){
+
+  currentX = 0;
+
+  thumb.style.transition =
+  ".35s";
+
+  sliderText.style.transition =
+  ".35s";
+
+  thumb.style.transform =
+  `translateX(0px)`;
+
+  sliderText.style.opacity = 1;
+
+  setTimeout(()=>{
+
+    thumb.style.transition = "";
+
+    sliderText.style.transition = "";
+
+  },350);
+
+}
+
+/* EVENTS */
+
+thumb.addEventListener(
+"touchstart",
+startDrag
+);
+
+thumb.addEventListener(
+"mousedown",
+startDrag
+);
+
+document.addEventListener(
+"touchmove",
+moveDrag
+);
+
+document.addEventListener(
+"mousemove",
+moveDrag
+);
+
+document.addEventListener(
+"touchend",
+endDrag
+);
+
+document.addEventListener(
+"mouseup",
+endDrag
+);
+
+/* =======================================
+   RAZORPAY
+======================================= */
+async function startRazorpayPayment(){
+
+  try{
+
+    /* 🔥 TOTAL */
+    const total =
+    Number(
+      localStorage.getItem(
+        "xeroxTotal"
+      ) || 0
+    );
+
+    /* 🔥 HALF PAYMENT */
+    const advance =
+    Math.ceil(total / 2);
+
+    /* 🔥 CREATE ORDER */
+    const response =
+    await fetch(
+      "https://razropay.onrender.com/create-order",
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+          amount: advance * 100
+
+        })
+      }
+    );
+
+    const data =
+    await response.json();
+
+    /* ❌ FAILED */
+    if(!data.success){
+
+      thumb.innerHTML = `
+        <i class="fa-solid fa-angle-right"></i>
+      `;
+
+      resetSlider();
+
+      return;
+
+    }
+
+    /* 🔥 RAZORPAY OPTIONS */
+    const options = {
+
+      key:
+      "rzp_live_SqrUSaPO5pA6gt",
+
+      amount:
+      data.order.amount,
+
+      currency:
+      data.order.currency,
+
+      order_id:
+      data.order.id,
+
+      name:
+      "CEZOO Xerox",
+
+      description:
+      "Advance Payment",
+
+      prefill:{
+
+        name:
+        localStorage.getItem(
+          "userName"
+        ) || "",
+
+        contact:
+        localStorage.getItem(
+          "userMobile"
+        ) || ""
+
+      },
+
+      theme:{
+        color:"#111"
+      },
+
+      modal:{
+
+        backdropclose:true,
+
+        escape:true,
+
+        handleback:true,
+
+        animation:true,
+
+        ondismiss:function(){
+
+          thumb.innerHTML = `
+            <i class="fa-solid fa-angle-right"></i>
+          `;
+
+          resetSlider();
+
+        }
+
+      },
+
+      /* ✅ PAYMENT SUCCESS */
+      handler:
+      async function(payment){
+
+        /* 🔥 SPINNER */
+        thumb.innerHTML = `
+          <div class="iosSpinner"></div>
+        `;
+
+        await saveXeroxOrder(
+          payment
+        );
+
+        /* 🔥 SUCCESS */
+        showSuccessPopup();
+
+        /* 🔥 RESET */
+        setTimeout(()=>{
+
+          resetSlider();
+
+          thumb.innerHTML = `
+            <i class="fa-solid fa-angle-right"></i>
+          `;
+
+        },800);
+
+      }
+
+    };
+
+    /* 🔥 CREATE INSTANCE */
+    const rzp =
+    new Razorpay(options);
+
+    /* ❌ PAYMENT FAILED */
+    rzp.on(
+      "payment.failed",
+      function(){
+
+        thumb.innerHTML = `
+          <i class="fa-solid fa-angle-right"></i>
+        `;
+
+        setTimeout(()=>{
+
+          resetSlider();
+
+        },150);
+
+      }
+    );
+
+    /* 🔥 OPEN */
+    rzp.open();
+
+    /* 🔥 OPEN LIKE SWIGGY SHEET */
+    setTimeout(()=>{
+
+      const modal =
+      document.querySelector(
+        ".razorpay-container"
+      );
+
+      if(modal){
+
+        modal.style.alignItems =
+        "flex-end";
+
+        const frame =
+        modal.querySelector(
+          ".razorpay-checkout-frame"
+        );
+
+        if(frame){
+
+          frame.style.borderTopLeftRadius =
+          "24px";
+
+          frame.style.borderTopRightRadius =
+          "24px";
+
+          frame.style.overflow =
+          "hidden";
+
+          frame.style.maxHeight =
+          "92vh";
+
+          frame.style.animation =
+          "sheetUp .28s ease";
+
+        }
+
+      }
+
+    },120);
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+    thumb.innerHTML = `
+      <i class="fa-solid fa-angle-right"></i>
+    `;
+
+    resetSlider();
+
+  }
+
+}
+/* =======================================
+   SAVE ORDER
+======================================= */
+async function saveXeroxOrder(payment){
+
+  /* ✅ GET REAL DATA */
+
+  const items =
+  JSON.parse(
+    localStorage.getItem(
+      "printStudio"
+    ) || "[]"
+  );
+
+  /* ✅ TOTAL */
+
+  let total = 0;
+
+  items.forEach(item => {
+
+    total += Number(
+      item.price || 0
+    );
+
+  });
+
+  const advance =
+  Math.ceil(total / 2);
+
+  /* ✅ INSERT */
+
+  const { error } =
+  await supabaseClient
+  .from("xerox_orders")
+  .insert([{
+
+    user_name:
+    localStorage.getItem(
+      "userName"
+    ),
+
+    mobile:
+    localStorage.getItem(
+      "userMobile"
+    ),
+
+    items: items,
+
+    total_amount: total,
+
+    advance_paid: advance,
+
+    payment_id:
+    payment
+    .razorpay_payment_id,
+
+    payment_status:
+    "Paid"
+
+  }]);
+
+  console.log(error);
+
+  if(error){
+
+    alert(error.message);
+
+    thumb.innerHTML = `
+      <i class="fa-solid fa-angle-right"></i>
+    `;
+
+    resetSlider();
+
+    return;
+
+  }
+
+  showSuccessPopup();
+
+}
+/* =======================================
+   SUCCESS POPUP
+======================================= */
+
+function showSuccessPopup(){
+
+  const popup =
+  document.createElement("div");
+
+  popup.id =
+  "xeroxSuccessPopup";
+
+  popup.innerHTML = `
+
+    <div class="successCenter">
+
+      <div class="successTick">
+
+        <i class="fa-solid fa-check"></i>
+
+      </div>
+
+      <div class="successTitle">
+
+        Order Placed
+
+      </div>
+
+      <div class="successSub">
+
+        Your order was booked successfully 🎉
+
+      </div>
+
+    </div>
+
+  `;
+
+  document.body.appendChild(
+    popup
+  );
+thumb.innerHTML = `
+<i class="fa-solid fa-angle-right"></i>
+`;
+
+resetSlider();
+
+  setTimeout(()=>{
+
+    popup.classList.add(
+      "show"
+    );
+
+  },50);
+
+  /* CLEAR STORAGE */
+
+  localStorage.removeItem(
+    "xeroxFiles"
+  );
+
+  localStorage.removeItem(
+    "passportPhotos"
+  );
+
+  localStorage.removeItem(
+    "xeroxTotal"
+  );
+
+  /* AUTO HIDE */
+
+  setTimeout(()=>{
+
+    popup.style.opacity = 0;
+
+    setTimeout(()=>{
+
+      popup.remove();
+
+      window.location.href =
+      "index.html";
+
+    },400);
+
+  },3000);
+
+}
+</script>
+
+</body>
+</html>
